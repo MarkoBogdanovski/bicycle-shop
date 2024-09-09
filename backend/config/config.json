@@ -1,0 +1,9 @@
+{
+  "development": {
+    "username": "owneru",
+    "password": "shoppw",
+    "database": "shop",
+    "host": "postgres",
+    "dialect": "postgres"
+  }
+}

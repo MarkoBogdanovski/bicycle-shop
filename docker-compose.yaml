@@ -1,0 +1,42 @@
+services:
+  web:
+    build:
+      context: .
+      target: node
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: owneru
+      DB_PASSWORD: shoppw
+      DB_NAME: shop
+    networks:
+      - backend-api
+
+  postgres:
+    image: postgres
+    build:
+      context: .
+      target: postgres  # Path to the directory containing the PostgreSQL Dockerfile (if applicable)
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: shoppw
+    volumes:
+    - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    networks:
+      - backend-api
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+networks:
+  backend-api:
