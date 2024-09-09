@@ -14,14 +14,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      options: {
-        type: Sequelize.JSONB,
-        allowNull: false,
-      },
-      prices: {
-        type: Sequelize.JSONB,
-        allowNull: false,
-      },
       categoryId: {
         type: Sequelize.UUID,
         allowNull: false,

@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         through: 'ProductParts',
         as: 'parts',
         foreignKey: 'productId',
+        otherKey: 'partId',
       });
     }
 
@@ -27,29 +28,24 @@ module.exports = (sequelize, DataTypes) => {
      * @param {Object} selectedOptions - User's selected configuration.
      * @returns {number} - The total price of the product.
     */
-    calculatePrice(selectedOptions) {
-      let totalPrice = 0;
-
-      // Validate selected options
-      if (!selectedOptions || typeof selectedOptions !== 'object') {
-        throw new Error('Invalid options provided.');
+    async calculatePrice(selectedOptions) {
+      if (!Array.isArray(selectedOptions) || selectedOptions.length === 0) {
+        throw new Error('Selected options must be a non-empty array.');
       }
 
-      // Calculate base prices for each selected option
-      for (const [option, selectedValue] of Object.entries(selectedOptions)) {
-        if (this.prices[option] && this.prices[option][selectedValue]) {
-          totalPrice += this.prices[option][selectedValue];
-        }
-      }
+      // Fetch only the parts that match the selected options (part IDs)
+      const selectedParts = await this.getParts({
+        where: {
+          id: selectedOptions, // Match the selected part IDs
+        },
+      });
 
-      // Handle frame and finish dependencies
-      const frameType = selectedOptions.frameType;
-      if (frameType && this.prices.frameFinishDependency && this.prices.frameFinishDependency[frameType]) {
-        totalPrice += this.prices.frameFinishDependency[frameType];
-      }
+      // Sum the prices of the selected parts
+      const totalPrice = selectedParts.reduce((total, part) => total + part.price, 0);
 
       return totalPrice;
     }
+
 
     /**
      * Validates if the selected configuration has any prohibited combinations.
@@ -80,14 +76,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
-    options: {
-      type: DataTypes.JSONB,
-      allowNull: false,
-    },
-    prices: {
-      type: DataTypes.JSONB,
       allowNull: false,
     },
     categoryId: {

@@ -17,19 +17,7 @@ const testCreate = async(req, res, next) => {
     const response = await Product.create({
       name: 'Custom Bike',
       categoryId: category.id,
-      options: {
-        frameType: ['Full-suspension', 'Diamond'],
-        wheels: ['Road wheels', 'Mountain wheels']
-      },
-      prices: {
-        basePrice: 300,
-        frameFinishDependency: { 'Full-suspension': 50, 'Diamond': 35 }
-      },
       categoryId: '8bb12075-de3a-4004-a6d8-acb8f73391d8',
-      stock: {
-        frameType: { 'Full-suspension': true, 'Diamond': false },
-        wheels: { 'Road wheels': true, 'Mountain wheels': true }
-      },
       prohibitedCombinations: [
         { option1: 'wheels', value1: 'Mountain wheels', option2: 'frameType', value2: 'Diamond' }
       ]
