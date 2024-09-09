@@ -1,16 +1,27 @@
 const express = require('express');
-const routes = require('./routes/product.js'); // import the routes
+const routes = require('./routes'); // Import the routes
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+
+dotenv.config(); // Load environment variables from .env file
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+// Middleware for parsing request bodies
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json()); // Parse JSON request bodies
 
-app.use('/', routes); //to use the routes
+// Use routes
+app.use('/', routes);
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
+});
+
+// Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

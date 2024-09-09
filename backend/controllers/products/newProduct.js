@@ -1,6 +1,6 @@
 const { Product } = require('../../models');
 
-// Create new ticket
+// Create new product
 const newProduct = async (req, res, next) => {
   try {
 

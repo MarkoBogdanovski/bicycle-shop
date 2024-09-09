@@ -1,6 +1,6 @@
 const { Product } = require('../../models');
 
-// Create new ticket
+// List products
 const listProduct = async (req, res, next) => {
   try {
     const response = await fetchProducts(req.body);
