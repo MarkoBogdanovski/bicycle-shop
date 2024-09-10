@@ -1,4 +1,5 @@
 const { Part } = require('../../models');
+const { Op } = require('sequelize');
 
 const listParts = async (req, res, next) => {
   try {
@@ -14,7 +15,11 @@ const listParts = async (req, res, next) => {
 // Feth Parts
 const fetchParts = async () => {
   try {
-    const parts = await Part.findAll();
+    const parts = await Part.findAll({
+      where: {
+        stock: true
+      }
+    });
 
     if (!parts) return { part, message: 'No parts available in stock.' };
 
