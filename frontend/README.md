@@ -1,38 +1,55 @@
-# Welcome to Remix!
+React Boilerplate
+========
 
-- [Remix Docs](https://remix.run/docs)
+![Build](https://github.com/chuntley/react-boilerplate/workflows/Build/badge.svg)
 
-## Development
+Installation
+---
 
-From your terminal:
+Requires Node >=18.x, excluding 19.x
 
-```sh
-npm run dev
+Install Yarn: https://yarnpkg.com/lang/en/docs/install/
+
+Clone and install dependencies:
+
+```bash
+$ git clone git@github.com:chuntley/react-boilerplate.git
+$ cd react-boilerplate
+$ yarn
 ```
 
-This starts your app in development mode, rebuilding assets on file changes.
+Development
+---
+To lift the dev server with hot module reloading.
+```bash
+$ yarn dev
+```
+The output of the command will list the URL to the dev server.
 
-## Deployment
+Build
+---
 
-First, build your app for production:
-
-```sh
-npm run build
+To bundle the React application
+```bash
+$ yarn dist
 ```
 
-Then run the app in production mode:
+Testing
+---
 
-```sh
-npm start
+```bash
+# run all tests including coverage report and linting
+$ yarn test
+
+# run tests in watch mode
+$ yarn test:watch
+
+# run single test without coverage or linting
+$ yarn test:lite
 ```
 
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `remix build`
-
-- `build/server`
-- `build/client`
+Linting
+---
+```bash
+$ yarn lint
+```
