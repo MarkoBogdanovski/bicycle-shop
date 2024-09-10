@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import withMultiSelectDropdown from "@/components/molecules/withMultiSelectDropdown"; // Adjust the import path as needed
 import useFetchData from "@/hooks/useFetchData"; // Adjust the path as needed
 import { convertToGroupedData } from "@/utils/helpers";
@@ -7,7 +7,6 @@ const API_URL = "http://localhost:3000";
 
 interface MyComponentProps {
   children;
-  selectedOptions;
 }
 
 const MyComponent: React.FC<MyComponentProps> = (props) => {
@@ -17,16 +16,42 @@ const MyComponent: React.FC<MyComponentProps> = (props) => {
 const EnhancedComponent = withMultiSelectDropdown(MyComponent);
 
 export default function AddProduct() {
+  const [localSelectedOptions, setLocalSelectedOptions] = useState<
+    Record<string, string[]>
+  >({});
   const { data, error, isLoading, isError } = useFetchData(
     `${API_URL}/api/parts`,
   );
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
+  useEffect(() => {
+    if (data) {
+      const groups = convertToGroupedData(data);
+      setLocalSelectedOptions(
+        Object.keys(groups).reduce(
+          (acc, groupKey) => {
+            acc[groupKey] = []; // Initialize selected options for each group
+            return acc;
+          },
+          {} as Record<string, string[]>,
+        ),
+      );
+    }
+  }, [data]);
+
+  const handleOptionChange = useCallback(
+    (groupKey: string, newSelectedOptions: string[]) => {
+      setLocalSelectedOptions((prev) => ({
+        ...prev,
+        [groupKey]: newSelectedOptions,
+      }));
+    },
+    [],
+  );
 
   const groups = data && convertToGroupedData(data);
 
-  console.log(groups);
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
 
   return (
     <form>
@@ -57,7 +82,13 @@ export default function AddProduct() {
           </div>
 
           <div className="mt-5 inline-grid grid-cols-2 gap-x-5 gap-y-3 sm:grid-cols-3 md:grid-cols-5">
-            {data && <EnhancedComponent groupedData={groups} />}
+            {data && (
+              <EnhancedComponent
+                groupedData={groups}
+                selectedOptions={localSelectedOptions}
+                onChange={handleOptionChange} // Ensure this is a function
+              />
+            )}
           </div>
 
           <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">

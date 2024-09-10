@@ -1,19 +1,10 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-
-interface Option {
-  id: string;
-  name: string;
-}
-
-interface Group {
-  label: string;
-  options: Option[];
-}
+import { GroupedData } from "@/types"; // Import your DataItem type
 
 interface MultiSelectDropdownProps {
   id: string;
   label: string;
-  group: Group; // Updated: we are passing a single group now
+  groups: Record<string, GroupedData>; // groups is an object with group names as keys
   selectedOptions: string[];
   onChange: (selected: string[]) => void;
 }
@@ -21,7 +12,7 @@ interface MultiSelectDropdownProps {
 const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   id,
   label,
-  group,
+  groups,
   selectedOptions,
   onChange,
 }) => {
@@ -77,36 +68,43 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
       {isOpen && (
         <div className="absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-gray-300">
           <div className="p-1">
-            <div className="px-2 py-1 text-sm font-medium text-gray-900">
-              {label}
-            </div>
-            {group?.options?.length > 0 ? (
-              group.options.map((option) => (
-                <div
-                  key={option.id}
-                  className="flex items-center px-2 py-1"
-                  onClick={(e) => e.stopPropagation()} // Prevent click from closing dropdown
-                >
-                  <input
-                    type="checkbox"
-                    id={`option-${option.id}`}
-                    checked={selectedOptions.includes(option.id)}
-                    onChange={() => handleOptionChange(option.id)}
-                    className="mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                  />
-                  <label
-                    htmlFor={`option-${option.id}`}
-                    className="text-sm font-medium text-gray-900"
-                  >
-                    {option.name}
-                  </label>
+            {Object.keys(groups).map((groupKey) => {
+              const group = groups[groupKey];
+              return (
+                <div key={groupKey}>
+                  <div className="px-2 py-1 text-sm font-medium text-gray-900">
+                    {label}
+                  </div>
+                  {group.options && group.options.length > 0 ? (
+                    group.options.map((option) => (
+                      <div
+                        key={option.id}
+                        className="flex items-center px-2 py-1"
+                        onClick={(e) => e.stopPropagation()} // Prevent click from closing dropdown
+                      >
+                        <input
+                          type="checkbox"
+                          id={`option-${option.id}`}
+                          checked={selectedOptions.includes(option.id)}
+                          onChange={() => handleOptionChange(option.id)}
+                          className="mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <label
+                          htmlFor={`option-${option.id}`}
+                          className="text-sm font-medium text-gray-900"
+                        >
+                          {option.name}
+                        </label>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="px-2 py-1 text-sm text-gray-500">
+                      No options available
+                    </div>
+                  )}
                 </div>
-              ))
-            ) : (
-              <div className="px-2 py-1 text-sm text-gray-500">
-                No options available
-              </div>
-            )}
+              );
+            })}
           </div>
         </div>
       )}

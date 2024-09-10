@@ -1,36 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import MultiSelectDropdown from "@/components/atoms/MultiSelectDropdown"; // Adjust the import path as needed
 import { GroupedData } from "@/types"; // Import your DataItem type
 
 interface WithMultiSelectDropdownProps {
-  groupedData: GroupedData;
+  groupedData: Record<string, GroupedData>;
+  selectedOptions: Record<string, string[]>; // Ensure this matches MultiSelectDropdown's expected type
+  onChange: (groupKey: string, selected: string[]) => void;
 }
+
+type LocalSelectedOptions = Record<string, string[]>; // Map group keys to selected option IDs
 const withMultiSelectDropdown = <P extends object>(
   WrappedComponent: React.ComponentType<P>,
 ) => {
   const WithMultiSelectDropdown: React.FC<
     Omit<P, keyof WithMultiSelectDropdownProps> & WithMultiSelectDropdownProps
   > = (props) => {
-    const { groupedData, ...restProps } = props as WithMultiSelectDropdownProps;
+    const { groupedData, selectedOptions, onChange, ...restProps } =
+      props as WithMultiSelectDropdownProps;
 
-    const [selectedOptions, setSelectedOptions] = useState<
-      Record<string, string[]>
-    >(
-      Object.keys(groupedData).reduce(
-        (acc, groupKey) => {
-          acc[groupKey] = [];
+    const [localSelectedOptions, setLocalSelectedOptions] =
+      useState<LocalSelectedOptions>(
+        Object.keys(groupedData).reduce((acc, key) => {
+          acc[key] = [];
           return acc;
-        },
-        {} as Record<string, string[]>,
-      ),
-    );
+        }, {} as LocalSelectedOptions),
+      );
 
-    const handleOptionChange = (groupKey: string, selected: string[]) => {
-      setSelectedOptions((prevState) => ({
-        ...prevState,
-        [groupKey]: selected,
-      }));
-    };
+    const handleOptionChange = useCallback(
+      (groupKey: string, newSelectedOptions: string[]) => {
+        setLocalSelectedOptions((prev) => ({
+          ...prev,
+          [groupKey]: newSelectedOptions,
+        }));
+        if (onChange) {
+          onChange(groupKey, newSelectedOptions); // Ensure onChange is a function
+        }
+      },
+      [onChange],
+    );
 
     return (
       <WrappedComponent {...(restProps as P)}>
@@ -41,9 +48,9 @@ const withMultiSelectDropdown = <P extends object>(
               key={groupKey}
               id={groupKey}
               label={group.label}
-              group={{ [groupKey]: group }}
-              selectedOptions={selectedOptions[groupKey]}
-              onChange={(selected) => handleOptionChange(groupKey, selected)}
+              groups={{ [groupKey]: group }}
+              selectedOptions={localSelectedOptions[groupKey] || []}
+              onChange={(selected) => handleOptionChange(groupKey, selected)} // Ensure this is a function
             />
           );
         })}
