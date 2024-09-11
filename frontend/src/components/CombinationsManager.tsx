@@ -49,15 +49,20 @@ const CombinationsManager: React.FC<CombinationsManagerProps> = ({
 
   return (
     <>
-      <div className="mt-5 inline-grid grid-cols-2 gap-x-5 gap-y-3 sm:grid-cols-3 md:grid-cols-5">
+      <div className="inline-grid grid-cols-2 gap-x-5 gap-y-3 sm:grid-cols-3 md:grid-cols-5">
         <EnhancedComponent
           groupedData={groups}
           selectedOptions={localSelectedOptions}
           onChange={handleOptionChange}
         />
       </div>
-
-      <div className="mt-5 grid grid-cols-1 gap-y-4">
+      <div
+        className="text-base font-semibold text-gray-900 mb-5"
+        style={{ marginTop: 45, marginBottom: 0 }}
+      >
+        Prohibited Combinations
+      </div>
+      <div className="mt-0 grid grid-cols-1 gap-y-4">
         {Object.entries(combinations).map(([key, combination], index) => (
           <div key={key} className="flex items-start space-x-4">
             <ProhibitedCombinations

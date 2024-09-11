@@ -39,7 +39,10 @@ const AddProduct: React.FC = () => {
   return (
     <form>
       <div className="border-b border-b-grey/900 pb-6">
-        <div className="space-y-7">
+        <h2 className="text-base font-semibold leading-7 text-gray-900">
+          Product Information
+        </h2>
+        <div className="space-y-5">
           <ProductInfoInput />
 
           <CombinationsManager

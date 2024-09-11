@@ -44,7 +44,7 @@ const ProhibitedCombinations: React.FC<ProhibitedCombinationsProps> = ({
     <>
       <div className="col-span-1">
         <label className="block text-sm font-medium leading-6 text-gray-900 mb-1">
-          Option
+          Condition
         </label>
         <Dropdown
           id="country"
@@ -58,7 +58,7 @@ const ProhibitedCombinations: React.FC<ProhibitedCombinationsProps> = ({
       </div>
       <div className="sm:col-span-1 mt-0">
         <MultiSelectDropdown
-          label="Prohibited Combinations"
+          label="Options"
           groups={options} // Assuming data structure fits here
           selectedOptions={localProhibitedOptions}
           onChange={handleProhibitedOptionsChange}
