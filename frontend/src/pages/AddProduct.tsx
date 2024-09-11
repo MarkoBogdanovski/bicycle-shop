@@ -31,22 +31,21 @@ const AddProduct: React.FC = () => {
     groupKey: string | number,
     newSelectedOptions: Partial<{ condition: string; options: string[] }>,
   ) => {
-    console.log(groupKey, newSelectedOptions);
     setCombinations((prev) => {
-      const existingCombination = prev[groupKey] || {
+      const currentCombination = prev[groupKey] || {
         condition: "",
         options: [],
       };
 
-      // Only update the fields that have new values
+      // Ensure we only update condition or options, not nesting them
       const updatedCombination = {
-        ...existingCombination,
-        ...newSelectedOptions, // Apply only provided values
+        condition: newSelectedOptions.condition || currentCombination.condition, // Keep existing condition if no update
+        options: newSelectedOptions.options || currentCombination.options, // Keep existing options if no update
       };
 
       return {
         ...prev,
-        [groupKey]: updatedCombination,
+        [groupKey]: updatedCombination, // Update only the specific combination without nesting
       };
     });
   };

@@ -63,18 +63,17 @@ const CombinationsManager: React.FC<CombinationsManagerProps> = ({
               condition={condition}
               prohibitedOptions={prohibitedOptions}
               onConditionChange={(newCondition) => {
-                handleCombinationsChange(`${combinationId}-${index}`, {
-                  condition: newCondition, // Update condition only
-                  // Preserve current prohibited options
+                handleCombinationsChange(combinationId, {
+                  condition: newCondition?.condition, // Update condition only
                 });
               }}
               onProhibitedOptionsChange={(newOptions) => {
-                handleCombinationsChange(`${combinationId}-${index}`, {
-                  // Preserve current condition
-                  options: newOptions, // Update options only
+                handleCombinationsChange(combinationId, {
+                  options: newOptions?.options, // Update options only
                 });
               }}
             />
+
             {combinations.length > 1 && index !== 0 && (
               <button
                 type="button"
