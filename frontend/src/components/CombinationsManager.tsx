@@ -9,12 +9,14 @@ const MyComponent = (props: { children: React.ReactNode }) => (
 const EnhancedComponent = withMultiSelectDropdown(MyComponent);
 
 interface CombinationsManagerProps {
-  data: object[];
+  data: object;
   localSelectedOptions: object;
   condition: string;
   prohibitedOptions: string[];
-  handleConditionChange: (value: string) => void;
-  handleProhibitedOptionsChange: (value: string[]) => void;
+  handleCombinationsChange: (
+    groupKey: string | number,
+    newSelectedOptions: Record<string, string[]>,
+  ) => void;
   handleOptionChange: (groupKey: string, newSelectedOptions: string[]) => void;
 }
 
@@ -23,8 +25,7 @@ const CombinationsManager: React.FC<CombinationsManagerProps> = ({
   localSelectedOptions,
   condition,
   prohibitedOptions,
-  handleConditionChange,
-  handleProhibitedOptionsChange,
+  handleCombinationsChange,
   handleOptionChange,
 }) => {
   const [combinations, setCombinations] = useState<number[]>([0]);
@@ -37,7 +38,10 @@ const CombinationsManager: React.FC<CombinationsManagerProps> = ({
     setCombinations((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const groups = data && convertToGroupedData(data);
+  const groups = React.useMemo(
+    () => data && convertToGroupedData(data),
+    [data],
+  );
 
   return (
     <>
@@ -52,40 +56,47 @@ const CombinationsManager: React.FC<CombinationsManagerProps> = ({
 
       {/* Prohibited Combinations */}
       <div className="mt-5 grid grid-cols-1 gap-y-4">
-        {combinations
-          .slice()
-          .reverse()
-          .map((combinationId, index) => (
-            <div key={index} className="flex items-start space-x-4">
-              <ProhibitedCombinations
-                data={data}
-                condition={condition}
-                prohibitedOptions={prohibitedOptions}
-                onConditionChange={handleConditionChange}
-                onProhibitedOptionsChange={handleProhibitedOptionsChange}
-              />
-              {combinations.length > 1 && index !== 0 && (
-                <button
-                  type="button"
-                  onClick={() =>
-                    removeProhibitedCombination(combinations.length - 1 - index)
-                  }
-                  className="mt-8 rounded-md bg-transparent text-red-500 hover:bg-red-600 hover:text-white px-3 py-1.5 text-sm font-semibold hover:shadow-sm"
-                >
-                  -
-                </button>
-              )}
-              {index === 0 && (
-                <button
-                  type="button"
-                  onClick={addProhibitedCombination}
-                  className="mt-8 rounded-md bg-transparent px-3 py-1.5 text-sm font-semibold text-gray-900 hover:shadow-sm hover:bg-gray-200"
-                >
-                  +
-                </button>
-              )}
-            </div>
-          ))}
+        {combinations.slice().map((combinationId, index) => (
+          <div key={index} className="flex items-start space-x-4">
+            <ProhibitedCombinations
+              data={data}
+              condition={condition}
+              prohibitedOptions={prohibitedOptions}
+              onConditionChange={(newCondition) => {
+                handleCombinationsChange(combinationId, {
+                  condition: newCondition, // Update condition only
+                  // Preserve current prohibited options
+                });
+              }}
+              onProhibitedOptionsChange={(newOptions) => {
+                handleCombinationsChange(combinationId, {
+                  // Preserve current condition
+                  options: newOptions, // Update options only
+                });
+              }}
+            />
+            {combinations.length > 1 && index !== 0 && (
+              <button
+                type="button"
+                onClick={() =>
+                  removeProhibitedCombination(combinations.length - 1 - index)
+                }
+                className="mt-8 rounded-md bg-transparent text-red-500 hover:bg-red-600 hover:text-white px-3 py-1.5 text-sm font-semibold hover:shadow-sm"
+              >
+                -
+              </button>
+            )}
+            {index === 0 && (
+              <button
+                type="button"
+                onClick={addProhibitedCombination}
+                className="mt-8 rounded-md bg-transparent px-3 py-1.5 text-sm font-semibold text-gray-900 hover:shadow-sm hover:bg-gray-200"
+              >
+                +
+              </button>
+            )}
+          </div>
+        ))}
       </div>
     </>
   );

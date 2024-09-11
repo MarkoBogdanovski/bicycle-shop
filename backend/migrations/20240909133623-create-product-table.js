@@ -28,6 +28,10 @@ module.exports = {
         type: Sequelize.JSONB,
         allowNull: true,
       },
+      basePrice: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

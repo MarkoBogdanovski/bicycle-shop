@@ -31,3 +31,19 @@ export interface OptionGroup {
 export interface GroupedData {
   [key: string]: OptionGroup;
 }
+
+export interface AddProductContextType {
+  localSelectedOptions: Record<string, string[]>;
+  condition: string;
+  prohibitedOptions: string[];
+  setLocalSelectedOptions: React.Dispatch<
+    React.SetStateAction<Record<string, string[]>>
+  >;
+  setCombinations: React.Dispatch<
+    React.SetStateAction<Record<string, string[]>>
+  >;
+  data: GroupedData[] | undefined;
+  error: Error | null;
+  isLoading: boolean;
+  isError: boolean;
+}

@@ -1,54 +1,62 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React from "react";
 import ProductInfoInput from "@/components/ProductInfoInput";
 import CombinationsManager from "@/components/CombinationsManager";
-import useFetchData from "@/hooks/useFetchData";
-import { convertToGroupedData } from "@/utils/helpers";
-
-const API_URL = "http://localhost:3000";
+import { useAddProductContext } from "@/contexts/AddProductContext";
 
 const AddProduct: React.FC = () => {
-  const [localSelectedOptions, setLocalSelectedOptions] = useState<object>({});
-  const [condition, setCondition] = useState<string>(""); // State for single select
-  const [prohibitedOptions, setProhibitedOptions] = useState<string[]>([]);
-  const { data, error, isLoading, isError } = useFetchData(
-    `${API_URL}/api/parts`,
-  );
+  const {
+    localSelectedOptions,
+    condition,
+    prohibitedOptions,
+    combinations,
+    setLocalSelectedOptions,
+    setCombinations,
+    data,
+    isLoading,
+    isError,
+  } = useAddProductContext();
 
-  useEffect(() => {
-    if (data) {
-      const groups = convertToGroupedData(data);
-      setLocalSelectedOptions(
-        Object.keys(groups).reduce(
-          (acc, groupKey) => {
-            acc[groupKey] = []; // Initialize selected options for each group
-            return acc;
-          },
-          {} as Record<string, string[]>,
-        ),
-      );
-    }
-  }, [data]);
+  const handleOptionChange = (
+    groupKey: string,
+    newSelectedOptions: string[],
+  ) => {
+    setLocalSelectedOptions((prev) => ({
+      ...prev,
+      [groupKey]: newSelectedOptions,
+    }));
+  };
 
-  const handleOptionChange = useCallback(
-    (groupKey: string, newSelectedOptions: string[]) => {
-      setLocalSelectedOptions((prev) => ({
+  // TODO MAKE SURE THAT ONLY CORRECT FIELDS OF CORRECT COMBINATIONS ARE UPDATED
+  const handleCombinationsChange = (
+    groupKey: string | number,
+    newSelectedOptions: Partial<{ condition: string; options: string[] }>,
+  ) => {
+    console.log(groupKey, newSelectedOptions);
+    setCombinations((prev) => {
+      const existingCombination = prev[groupKey] || {
+        condition: "",
+        options: [],
+      };
+
+      // Only update the fields that have new values
+      const updatedCombination = {
+        ...existingCombination,
+        ...newSelectedOptions, // Apply only provided values
+      };
+
+      return {
         ...prev,
-        [groupKey]: newSelectedOptions,
-      }));
-    },
-    [],
-  );
-
-  const handleForm = () => {
-    console.log({
-      localSelectedOptions,
-      condition,
-      prohibitedOptions,
+        [groupKey]: updatedCombination,
+      };
     });
   };
 
+  const handleForm = () => {
+    console.log(combinations);
+  };
+
   if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
+  if (isError) return <div>Error: {error?.message}</div>;
 
   return (
     <form>
@@ -64,8 +72,7 @@ const AddProduct: React.FC = () => {
               localSelectedOptions={localSelectedOptions}
               condition={condition}
               prohibitedOptions={prohibitedOptions}
-              handleConditionChange={setCondition}
-              handleProhibitedOptionsChange={setProhibitedOptions}
+              handleCombinationsChange={handleCombinationsChange}
               handleOptionChange={handleOptionChange}
             />
           )}

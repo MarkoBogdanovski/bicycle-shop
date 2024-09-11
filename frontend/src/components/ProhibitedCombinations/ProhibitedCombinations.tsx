@@ -7,13 +7,12 @@ interface ProhibitedCombinationsProps {
   data: { id: string; name: string }[]; // Adjust the type based on your data structure
   condition: string; // Single selected option for the `select` element
   prohibitedOptions: string[]; // Multiple selected options for the `MultiSelectDropdown`
-  onConditionChange: (selected: string) => void; // Callback for handling change in `select`
-  onProhibitedOptionsChange: (selected: string[]) => void; // Callback for handling changes in `MultiSelectDropdown`
+  onConditionChange: (selected: object) => void; // Callback for handling change in `select`
+  onProhibitedOptionsChange: (selected: object) => void; // Callback for handling changes in `MultiSelectDropdown`
 }
 
 const ProhibitedCombinations: React.FC<ProhibitedCombinationsProps> = ({
   data,
-  condition,
   prohibitedOptions,
   onConditionChange,
   onProhibitedOptionsChange,
@@ -33,12 +32,12 @@ const ProhibitedCombinations: React.FC<ProhibitedCombinationsProps> = ({
 
   const handleConditionChange = (value: string) => {
     setLocalCondition(value);
-    onConditionChange(value);
+    onConditionChange({ condition: value, options: prohibitedOptions });
   };
 
   const handleProhibitedOptionsChange = (value: string[]) => {
     setLocalProhibitedOptions(value);
-    onProhibitedOptionsChange(value);
+    onProhibitedOptionsChange({ condition: localCondition, options: value });
   };
 
   return (
