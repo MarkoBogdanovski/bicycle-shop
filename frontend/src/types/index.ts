@@ -35,6 +35,7 @@ export interface GroupedData {
 export interface AddProductContextType {
   localSelectedOptions: Record<string, string[]>;
   condition: string;
+  combinations: object;
   prohibitedOptions: string[];
   setLocalSelectedOptions: React.Dispatch<
     React.SetStateAction<Record<string, string[]>>

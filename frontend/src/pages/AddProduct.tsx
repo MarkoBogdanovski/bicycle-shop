@@ -2,6 +2,7 @@ import React from "react";
 import ProductInfoInput from "@/components/ProductInfoInput";
 import CombinationsManager from "@/components/CombinationsManager";
 import { useAddProductContext } from "@/contexts/AddProductContext";
+import useHandleCombinationsChange from "@/hooks/useHandleCombinationsChange"; // Import the custom hook
 
 const AddProduct: React.FC = () => {
   const {
@@ -16,6 +17,10 @@ const AddProduct: React.FC = () => {
     isError,
   } = useAddProductContext();
 
+  const handleCombinationsChange = useHandleCombinationsChange({
+    setCombinations,
+  });
+
   const handleOptionChange = (
     groupKey: string,
     newSelectedOptions: string[],
@@ -24,30 +29,6 @@ const AddProduct: React.FC = () => {
       ...prev,
       [groupKey]: newSelectedOptions,
     }));
-  };
-
-  // TODO MAKE SURE THAT ONLY CORRECT FIELDS OF CORRECT COMBINATIONS ARE UPDATED
-  const handleCombinationsChange = (
-    groupKey: string | number,
-    newSelectedOptions: Partial<{ condition: string; options: string[] }>,
-  ) => {
-    setCombinations((prev) => {
-      const currentCombination = prev[groupKey] || {
-        condition: "",
-        options: [],
-      };
-
-      // Ensure we only update condition or options, not nesting them
-      const updatedCombination = {
-        condition: newSelectedOptions.condition || currentCombination.condition, // Keep existing condition if no update
-        options: newSelectedOptions.options || currentCombination.options, // Keep existing options if no update
-      };
-
-      return {
-        ...prev,
-        [groupKey]: updatedCombination, // Update only the specific combination without nesting
-      };
-    });
   };
 
   const handleForm = () => {
