@@ -2,9 +2,30 @@
 # Bicycle Shop
 
 ## Project Description
-
 When docker is initiated the Users table is seeded with 1 user and 1 category.
 Product table will use category relation but at the moment user table and relations won't be added.
 
 ## DB Schema
-![Alt text](https://i.imgur.com/1sI4dwL.png "DB Schema")
+![Alt text](https://i.imgur.com/a2tBBPG.png "DB Schema")
+### Entities in the database:
+#### Category
+Used to describe the type of product.
+Added to support future expansion of the store for new categories.
+#### Product
+Used to store products (Bicycles for now).
+1. name - Product Name
+2. categoryId - Category it belongs to
+3. basePrice - Base price for the product without extra options or cusotmizations
+4. prohibitedCombinations - List of combinations that are not allowed
+#### ProductParts
+Used as a many-to-many mapper
+#### Parts
+1. name - Part name
+2. type - Type of part (rim, color...)
+3. price - Price of the part
+4. stock - Used to mark if the part is available
+
+## Discussion Topics
+  1. Using Postgres database
+  2. Implementation of the business logic
+  3. Using Context instead of another state management
