@@ -1,5 +1,6 @@
-import { GroupedData } from "@/types";
 import React, { useState, useCallback, useEffect, useRef } from "react";
+import { GroupedData } from "@/types";
+import { ChevronDownIcon } from "@heroicons/react/16/solid";
 
 interface MultiSelectDropdownProps {
   id: string;
@@ -61,11 +62,14 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
       <button
         type="button"
         onClick={toggleDropdown}
-        className={`block rounded-md border-0 px-5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${minWidth}`}
+        className={`block rounded-md border-0 pl-5 pr-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${minWidth} flex`}
       >
         {selectedOptions.length === 0
           ? "Select options"
           : `${selectedOptions.length} item(s) selected`}
+        <ChevronDownIcon
+          className={`w-6 ml-auto mr-2 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+        />
       </button>
       {isOpen && (
         <div className="absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-gray-300">

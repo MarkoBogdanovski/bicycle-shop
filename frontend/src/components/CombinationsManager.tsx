@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ProhibitedCombinations from "./ProhibitedCombinations/ProhibitedCombinations"; // Import the HOC-wrapped component
 import withMultiSelectDropdown from "./MultiSelectDropdown/withMultiSelectDropdown";
 import { convertToGroupedData } from "@/utils/helpers";
+import { useAddProductContext } from "@/contexts/AddProductContext"; // Import the context hook
 
 const MyComponent = (props: { children: React.ReactNode }) => (
   <>{props.children}</>
@@ -11,8 +12,6 @@ const EnhancedComponent = withMultiSelectDropdown(MyComponent);
 interface CombinationsManagerProps {
   data: object;
   localSelectedOptions: object;
-  condition: string;
-  prohibitedOptions: string[];
   handleCombinationsChange: (
     groupKey: string | number,
     newSelectedOptions: Record<string, string[]>,
@@ -23,21 +22,26 @@ interface CombinationsManagerProps {
 const CombinationsManager: React.FC<CombinationsManagerProps> = ({
   data,
   localSelectedOptions,
-  condition,
-  prohibitedOptions,
   handleCombinationsChange,
   handleOptionChange,
 }) => {
-  const [combinations, setCombinations] = useState<number[]>([0]);
+  const { combinations, setCombinations } = useAddProductContext(); // Use the context hook
 
   const addProhibitedCombination = () => {
-    setCombinations((prev) => [...prev, prev.length]);
+    const newCombinationId = Object.keys(combinations).length; // Use the length as the new ID
+    setCombinations((prevCombinations) => ({
+      ...prevCombinations,
+      [newCombinationId]: { condition: "", options: [] },
+    }));
   };
 
-  const removeProhibitedCombination = (index: number) => {
-    setCombinations((prev) => prev.filter((_, i) => i !== index));
+  const removeProhibitedCombination = (key: string) => {
+    setCombinations((prevCombinations) => {
+      const updatedCombinations = { ...prevCombinations };
+      delete updatedCombinations[key];
+      return updatedCombinations;
+    });
   };
-
   const groups = React.useMemo(
     () => data && convertToGroupedData(data),
     [data],
@@ -45,7 +49,6 @@ const CombinationsManager: React.FC<CombinationsManagerProps> = ({
 
   return (
     <>
-      {/* Multi Select Dropdown */}
       <div className="mt-5 inline-grid grid-cols-2 gap-x-5 gap-y-3 sm:grid-cols-3 md:grid-cols-5">
         <EnhancedComponent
           groupedData={groups}
@@ -54,32 +57,29 @@ const CombinationsManager: React.FC<CombinationsManagerProps> = ({
         />
       </div>
 
-      {/* Prohibited Combinations */}
       <div className="mt-5 grid grid-cols-1 gap-y-4">
-        {combinations.slice().map((combinationId, index) => (
-          <div key={index} className="flex items-start space-x-4">
+        {Object.entries(combinations).map(([key, combination], index) => (
+          <div key={key} className="flex items-start space-x-4">
             <ProhibitedCombinations
               data={data}
-              condition={condition}
-              prohibitedOptions={prohibitedOptions}
+              condition={combination.condition}
+              prohibitedOptions={combination.options}
               onConditionChange={(newCondition) => {
-                handleCombinationsChange(combinationId, {
-                  condition: newCondition?.condition, // Update condition only
+                handleCombinationsChange(key, {
+                  condition: newCondition, // Update condition only
                 });
               }}
               onProhibitedOptionsChange={(newOptions) => {
-                handleCombinationsChange(combinationId, {
-                  options: newOptions?.options, // Update options only
+                handleCombinationsChange(key, {
+                  options: newOptions, // Update options only
                 });
               }}
             />
 
-            {combinations.length > 1 && index !== 0 && (
+            {Object.keys(combinations).length > 1 && index !== 0 && (
               <button
                 type="button"
-                onClick={() =>
-                  removeProhibitedCombination(combinations.length - 1 - index)
-                }
+                onClick={() => removeProhibitedCombination(key)}
                 className="mt-8 rounded-md bg-transparent text-red-500 hover:bg-red-600 hover:text-white px-3 py-1.5 text-sm font-semibold hover:shadow-sm"
               >
                 -

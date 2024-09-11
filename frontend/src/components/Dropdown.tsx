@@ -1,10 +1,6 @@
-// CustomDropdownButton.tsx
 import React, { useState, useRef, useEffect, useCallback } from "react";
-
-interface Option {
-  id: string;
-  name: string;
-}
+import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import { Option } from "@/types";
 
 interface CustomDropdownButtonProps {
   id: string;
@@ -65,11 +61,14 @@ const CustomDropdownButton: React.FC<CustomDropdownButtonProps> = ({
       <button
         type="button"
         onClick={handleButtonClick}
-        className={`block rounded-md border-0 px-5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${minWidth}`}
+        className={`block rounded-md border-0 pl-5 pr-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${minWidth} flex`}
       >
         {selectedOption
           ? options.find((option) => option.id === selectedOption)?.name
           : placeholder}
+        <ChevronDownIcon
+          className={`w-6 ml-auto mr-2 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+        />
       </button>
       {isOpen && (
         <div className="absolute z-10 mt-2 w-full rounded-md bg-white shadow-lg ring-1 ring-gray-300">

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import MultiSelectDropdown from "../MultiSelectDropdown/MultiSelectDropdown"; // Adjust the import path
 import withProhibitedCombinations from "./withProhibitedCombinations";
-import Dropdown from "../Dropdown/Dropdown";
+import Dropdown from "../Dropdown";
 
 interface ProhibitedCombinationsProps {
   data: { id: string; name: string }[]; // Adjust the type based on your data structure
   condition: string; // Single selected option for the `select` element
   prohibitedOptions: string[]; // Multiple selected options for the `MultiSelectDropdown`
-  onConditionChange: (selected: object) => void; // Callback for handling change in `select`
-  onProhibitedOptionsChange: (selected: object) => void; // Callback for handling changes in `MultiSelectDropdown`
+  onConditionChange: (selected: string) => void; // Callback for handling change in `select`
+  onProhibitedOptionsChange: (selected: string[]) => void; // Callback for handling changes in `MultiSelectDropdown`
 }
 
 const ProhibitedCombinations: React.FC<ProhibitedCombinationsProps> = ({
@@ -32,12 +32,12 @@ const ProhibitedCombinations: React.FC<ProhibitedCombinationsProps> = ({
 
   const handleConditionChange = (value: string) => {
     setLocalCondition(value);
-    onConditionChange({ condition: value, options: prohibitedOptions });
+    onConditionChange(value);
   };
 
   const handleProhibitedOptionsChange = (value: string[]) => {
     setLocalProhibitedOptions(value);
-    onProhibitedOptionsChange({ condition: localCondition, options: value });
+    onProhibitedOptionsChange(value);
   };
 
   return (

@@ -15,7 +15,7 @@ export const AddProductProvider: React.FC<{ children: React.ReactNode }> = ({
   const [localSelectedOptions, setLocalSelectedOptions] = useState<
     Record<string, string[]>
   >({});
-  const [combinations, setCombinations] = useState<string[]>([]);
+  const [combinations, setCombinations] = useState<string[]>([0]);
   const { data, error, isLoading, isError } = useFetchData(
     `${API_URL}/api/parts`,
   );

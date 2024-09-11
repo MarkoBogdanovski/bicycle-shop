@@ -7,8 +7,6 @@ import useHandleCombinationsChange from "@/hooks/useHandleCombinationsChange"; /
 const AddProduct: React.FC = () => {
   const {
     localSelectedOptions,
-    condition,
-    prohibitedOptions,
     combinations,
     setLocalSelectedOptions,
     setCombinations,
@@ -35,30 +33,23 @@ const AddProduct: React.FC = () => {
     console.log(combinations);
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading || !data) return <div>Loading...</div>;
   if (isError) return <div>Error: {error?.message}</div>;
 
   return (
     <form>
       <div className="border-b border-b-grey/900 pb-6">
         <div className="space-y-7">
-          {/* Product Information */}
           <ProductInfoInput />
 
-          {/* Combinations Manager */}
-          {data && (
-            <CombinationsManager
-              data={data}
-              localSelectedOptions={localSelectedOptions}
-              condition={condition}
-              prohibitedOptions={prohibitedOptions}
-              handleCombinationsChange={handleCombinationsChange}
-              handleOptionChange={handleOptionChange}
-            />
-          )}
+          <CombinationsManager
+            data={data}
+            localSelectedOptions={localSelectedOptions}
+            handleCombinationsChange={handleCombinationsChange}
+            handleOptionChange={handleOptionChange}
+          />
         </div>
       </div>
-      {/* Submit and Cancel Buttons */}
       <div className="mt-3 flex items-center justify-end gap-x-6">
         <button
           type="button"
