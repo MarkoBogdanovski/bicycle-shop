@@ -63,13 +63,13 @@ const CombinationsManager: React.FC<CombinationsManagerProps> = ({
               condition={condition}
               prohibitedOptions={prohibitedOptions}
               onConditionChange={(newCondition) => {
-                handleCombinationsChange(combinationId, {
+                handleCombinationsChange(`${combinationId}-${index}`, {
                   condition: newCondition, // Update condition only
                   // Preserve current prohibited options
                 });
               }}
               onProhibitedOptionsChange={(newOptions) => {
-                handleCombinationsChange(combinationId, {
+                handleCombinationsChange(`${combinationId}-${index}`, {
                   // Preserve current condition
                   options: newOptions, // Update options only
                 });

@@ -9,14 +9,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.Category, {
+      this.belongsTo(models.Product, {
         foreignKey: 'categoryId',
         as: 'category',
       });
 
       // New association with Product Parts
-      this.belongsToMany(models.Parts, {
-        through: models.ProductParts,
+      this.belongsToMany(models.ProductParts, {
+        through: 'ProductParts',
         as: 'parts',
         foreignKey: 'productId',
         otherKey: 'partId',
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
      * Calculates the total price based on selected options and price dependencies.
      * @param {Object} selectedOptions - User's selected configuration.
      * @returns {number} - The total price of the product.
-     */
+    */
     async calculatePrice(selectedOptions) {
       if (!Array.isArray(selectedOptions) || selectedOptions.length === 0) {
         throw new Error('Selected options must be a non-empty array.');
@@ -46,11 +46,12 @@ module.exports = (sequelize, DataTypes) => {
       return totalPrice;
     }
 
+
     /**
      * Validates if the selected configuration has any prohibited combinations.
      * @param {Object} selectedOptions - User's selected configuration.
      * @returns {boolean} - Returns true if the configuration is valid, false otherwise.
-     */
+   */
     validateCombinations(selectedOptions) {
       if (!selectedOptions || typeof selectedOptions !== 'object') {
         throw new Error('Invalid options provided.');
@@ -85,6 +86,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: false,
     },
+    productPartsId: {
+      type: DataTypes.UUID,
+      allowNull: true, // No foreign key constraint
+    },
     prohibitedCombinations: {
       type: DataTypes.JSONB,
       allowNull: true,
@@ -92,7 +97,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Product',
-    timestamps: true,
+    timestamps: true, // Include timestamps if needed
   });
 
   return Product;
