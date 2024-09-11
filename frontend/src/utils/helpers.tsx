@@ -1,6 +1,53 @@
-import { GroupedData } from "@/types"; // Adjust the path as needed
+import { GroupedData, Part } from "@/types"; // Adjust the path as needed
 
-export const convertToGroupedData = (data: any[]): GroupedData => {
+// This Component takes parts as a list of objects and returns it as a
+// grouped json output where parts are grouped by the part type
+//
+// INPUT
+// [
+//   {
+//   "id": "44c08a5f-9890-4a02-99de-59b2a4ab07f5",
+//   "name": "Full-Suspension",
+//   "type": "frameType",
+//   "price": 50,
+//   "stock": 100,
+//   "createdAt": "2024-09-09T16:41:20.475Z",
+//   "updatedAt": "2024-09-09T16:41:20.475Z"
+//   },
+//   {
+//   "id": "69cf8b07-29e6-4aba-afc8-d71b3e36f162",
+//   "name": "Diamond",
+//   "type": "frameType",
+//   "price": 30,
+//   "stock": 10,
+//   "createdAt": "2024-09-09T16:41:20.475Z",
+//   "updatedAt": "2024-09-09T16:41:20.475Z"
+//   },
+// ]
+//
+// OUTPUT
+//
+// {
+//   "rimColor": {
+//       "id": "23ebd64d-1939-4467-84d2-2a0f27b7b67a",
+//       "label": "Rim Color",
+//       "options": [
+//           {
+//               "id": "23ebd64d-1939-4467-84d2-2a0f27b7b67a",
+//               "name": "Red"
+//           },
+//           {
+//               "id": "04baf7e3-57df-470d-8344-ce735a7785b4",
+//               "name": "Blue"
+//           },
+//           {
+//               "id": "73ab466f-1b2f-400e-9081-bfe5372305b4",
+//               "name": "Black"
+//           }
+//       ]
+//   }
+// }
+export const convertToGroupedData = (data: Part[]): GroupedData => {
   // Initialize the output object
   const groupedData: GroupedData = {};
 

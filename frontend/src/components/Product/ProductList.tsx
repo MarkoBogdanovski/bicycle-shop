@@ -1,5 +1,5 @@
 import React from "react";
-import ProductItem from "@/components/molecules/ProductItem";
+import ProductItem from "./ProductItem";
 
 const products = [
   {

@@ -1,5 +1,5 @@
 import React from "react";
-import ProductList from "@/components/organisms/ProductList";
+import ProductList from "@/components/Product/ProductList";
 
 const Home: React.FC = (): JSX.Element => {
   return <ProductList />;

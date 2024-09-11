@@ -1,14 +1,14 @@
 import React, { useState, useCallback } from "react";
-import MultiSelectDropdown from "@/components/atoms/MultiSelectDropdown"; // Adjust the import path as needed
+import MultiSelectDropdown from "./MultiSelectDropdown"; // Adjust the import path as needed
 import { GroupedData } from "@/types"; // Import your DataItem type
 
 interface WithMultiSelectDropdownProps {
-  groupedData: Record<string, GroupedData>;
-  selectedOptions: Record<string, string[]>; // Ensure this matches MultiSelectDropdown's expected type
+  groupedData: GroupedData[];
+  selectedOptions: string[]; // Ensure this matches MultiSelectDropdown's expected type
   onChange: (groupKey: string, selected: string[]) => void;
 }
 
-type LocalSelectedOptions = Record<string, string[]>; // Map group keys to selected option IDs
+type LocalSelectedOptions = string[]; // Map group keys to selected option IDs
 const withMultiSelectDropdown = <P extends object>(
   WrappedComponent: React.ComponentType<P>,
 ) => {

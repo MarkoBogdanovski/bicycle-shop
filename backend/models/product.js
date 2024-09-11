@@ -78,6 +78,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    basePrice: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
     categoryId: {
       type: DataTypes.UUID,
       allowNull: false,

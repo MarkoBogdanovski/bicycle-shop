@@ -1,12 +1,13 @@
+import { GroupedData } from "@/types";
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { GroupedData } from "@/types"; // Import your DataItem type
 
 interface MultiSelectDropdownProps {
   id: string;
   label: string;
-  groups: Record<string, GroupedData>; // groups is an object with group names as keys
+  groups: GroupedData[];
   selectedOptions: string[];
   onChange: (selected: string[]) => void;
+  minWidth: string;
 }
 
 const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
@@ -15,6 +16,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   groups,
   selectedOptions,
   onChange,
+  minWidth = "w-48", // Default min-width if not provided
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -52,14 +54,14 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
     <div className="relative" ref={dropdownRef}>
       <label
         htmlFor={id}
-        className="block text-sm font-medium leading-6 text-gray-900"
+        className="block text-sm font-medium leading-6 text-gray-900 mb-1"
       >
         {label}
       </label>
       <button
         type="button"
         onClick={toggleDropdown}
-        className="block w-full rounded-md border-0 px-10 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+        className={`block rounded-md border-0 px-5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${minWidth}`}
       >
         {selectedOptions.length === 0
           ? "Select options"
@@ -72,9 +74,6 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
               const group = groups[groupKey];
               return (
                 <div key={groupKey}>
-                  <div className="px-2 py-1 text-sm font-medium text-gray-900">
-                    {label}
-                  </div>
                   {group.options && group.options.length > 0 ? (
                     group.options.map((option) => (
                       <div
