@@ -14,8 +14,8 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      partId: {
-        type: Sequelize.UUID,
+      partsId: {
+        type: Sequelize.JSONB,
         allowNull: false,
         references: {
           model: 'Parts', // Name of the referenced table
@@ -29,7 +29,7 @@ module.exports = {
       indexes: [
         {
           unique: true,
-          fields: ['productId', 'partId'], // Unique constraint on the combination of productId and partId
+          fields: ['productId', 'partsId'], // Unique constraint on the combination of productId and partId
         },
       ],
     });

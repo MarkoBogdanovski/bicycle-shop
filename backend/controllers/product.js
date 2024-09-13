@@ -4,7 +4,6 @@ const listProduct = require('./products/listProduct');
 
 module.exports = {
   newProduct,
-  testCreate,
   listProduct,
   // deleteProduct
 }

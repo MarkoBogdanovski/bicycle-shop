@@ -1,8 +1,9 @@
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { DataItem } from "@/types"; // Import your DataItem type
+import { API_URL } from "@/utils/env";
 
 const fetchData = async (endpoint: string): Promise<DataItem[]> => {
-  const response = await fetch(endpoint);
+  const response = await fetch(`${API_URL}/${endpoint}`);
   if (!response.ok) throw new Error("Network response was not ok");
   return response.json();
 };

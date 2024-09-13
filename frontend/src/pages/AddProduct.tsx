@@ -1,20 +1,24 @@
 import React from "react";
 import ProductInfoInput from "@/components/ProductInfoInput";
 import CombinationsManager from "@/components/CombinationsManager";
-import { useAddProductContext } from "@/contexts/AddProductContext";
+import { useAddProductContext } from "@/providers/AddProductProvider";
 import useHandleCombinationsChange from "@/hooks/useHandleCombinationsChange"; // Import the custom hook
+import Notification from "@/components/Notification";
 
 const AddProduct: React.FC = () => {
+  const [showNotification, setShowNotification] = React.useState<boolean>(true);
+
   const {
     localSelectedOptions,
-    combinations,
+    notification,
     setLocalSelectedOptions,
     setCombinations,
+    resetForm,
+    handleForm,
     data,
     isLoading,
     isError,
   } = useAddProductContext();
-
   const handleCombinationsChange = useHandleCombinationsChange({
     setCombinations,
   });
@@ -29,15 +33,23 @@ const AddProduct: React.FC = () => {
     }));
   };
 
-  const handleForm = () => {
-    console.log(combinations);
-  };
+  React.useEffect(
+    () => setShowNotification(!!notification.message),
+    [notification],
+  );
 
   if (isLoading || !data) return <div>Loading...</div>;
   if (isError) return <div>Error: {error?.message}</div>;
 
   return (
     <form>
+      {showNotification && (
+        <Notification
+          type={notification?.type}
+          message={notification?.message}
+          onClose={() => setShowNotification(false)}
+        />
+      )}
       <div className="border-b border-b-grey/900 pb-6">
         <h2 className="text-base font-semibold leading-7 text-gray-900">
           Product Information
@@ -56,7 +68,8 @@ const AddProduct: React.FC = () => {
       <div className="mt-3 flex items-center justify-end gap-x-6">
         <button
           type="button"
-          className="text-sm font-semibold leading-6 text-gray-900"
+          onClick={resetForm}
+          className="rounded-md px-3 py-2 text-sm font-semibold text-gray-9000 hover:shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Cancel
         </button>

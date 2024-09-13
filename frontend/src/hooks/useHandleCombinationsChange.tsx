@@ -12,6 +12,7 @@ interface UseHandleCombinationsChangeParams {
   setCombinations: Dispatch<SetStateAction<Combinations>>; // Ensure this matches
 }
 
+// Handle combinations for all the multiple instances of prohibited combinations
 const useHandleCombinationsChange = ({
   setCombinations,
 }: UseHandleCombinationsChangeParams) => {

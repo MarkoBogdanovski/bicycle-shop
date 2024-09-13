@@ -91,3 +91,17 @@ const formatLabel = (type: string): string => {
       return "Unknown Type";
   }
 };
+
+// To format a number input into a standard price format (e.g., with commas and two decimal places)`
+export const formatPrice = (value: string | number): string => {
+  // Ensure the value is a number
+  const numberValue = typeof value === "string" ? parseFloat(value) : value;
+
+  // Check if it's a valid number
+  if (isNaN(numberValue)) return "0.00";
+
+  // Format the number as a price with two decimal places and commas
+  return numberValue
+    .toFixed(2) // Ensures two decimal places
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Adds commas for thousands
+};

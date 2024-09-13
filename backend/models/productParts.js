@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
 
       // Association with Part
       this.belongsTo(models.Part, {
-        foreignKey: 'partId',
+        foreignKey: 'partsId',
         as: 'part',
       });
     }
@@ -29,8 +29,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    partId: {
-      type: DataTypes.UUID,
+    partsId: {
+      type: DataTypes.ARRAY,
       allowNull: false,
     },
   }, {

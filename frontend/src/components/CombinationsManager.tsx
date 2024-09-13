@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ProhibitedCombinations from "./ProhibitedCombinations/ProhibitedCombinations"; // Import the HOC-wrapped component
 import withMultiSelectDropdown from "./MultiSelectDropdown/withMultiSelectDropdown";
 import { convertToGroupedData } from "@/utils/helpers";
-import { useAddProductContext } from "@/contexts/AddProductContext"; // Import the context hook
+import { useAddProductContext } from "@/providers/AddProductProvider"; // Import the context hook
 
 const MyComponent = (props: { children: React.ReactNode }) => (
   <>{props.children}</>
