@@ -6,17 +6,17 @@ const newProduct = async (req, res, next) => {
     const productData = {
       name: req.body.productName,
       basePrice: req.body.productPrice,
-      categoryId: '',
-      combinations: req.body.combinations
+      categoryId: req.body.categoryId,
+      prohibitedCombinations: req.body.combinations
     };
 
     const { id } = await createProduct(productData);
     const productPartsId = await addProductParts(id, req.body.localSelectedOptions);
-    const res = await updateProductPartsColumn(id, productPartsId)
+    const response = await updateProductPartsColumn(id, productPartsId)
 
-    res.status(201).json({res});
+    res.status(201).json({response});
   } catch (error) {
-    console.error(req);
+    console.error(error);
     res.status(500).json({ error: 'Unable to add product.' });
   }
 };
@@ -26,7 +26,6 @@ const createProduct = async (data) => {
     return await Product.create(data);
   } catch (error) {
     console.error(error);
-    return error;
   }
 }
 
@@ -38,36 +37,36 @@ const createProduct = async (data) => {
 const addProductParts = async(productId, localSelectedOptions) => {
   try {
     // Validate input
-    if (!productId || !localSelectedOptions || typeof localSelectedOptions !== 'object') {
-      throw new Error('Invalid input');
-    }
+    // if (!productId || !localSelectedOptions || typeof localSelectedOptions !== 'object') {
+    //   throw new Error('Invalid input');
+    // }
 
-    // Gather selected parts for the product
-    const selectedParts = {};
+    // // Gather selected parts for the product
+    // const selectedParts = {};
 
-    for (const [partType, options] of Object.entries(localSelectedOptions)) {
-      if (options.length > 0) {
-        const partIds = [];
+    // for (const [partType, options] of Object.entries(localSelectedOptions)) {
+    //   if (options.length > 0) {
+    //     const partIds = [];
 
-        for (const option of options) {
-          const part = await Parts.findOne({ where: { name: option } });
-          if (part) {
-            partIds.push(part.id);
-          } else {
-            console.warn(`Part not found: ${option}`);
-          }
-        }
+    //     for (const option of options) {
+    //       const part = await Parts.findOne({ where: { name: option } });
+    //       if (part) {
+    //         partIds.push(part.id);
+    //       } else {
+    //         console.warn(`Part not found: ${option}`);
+    //       }
+    //     }
 
-        if (partIds.length > 0) {
-          selectedParts[partType] = partIds;
-        }
-      }
-    }
+    //     if (partIds.length > 0) {
+    //       selectedParts[partType] = partIds;
+    //     }
+    //   }
+    // }
 
     // Add record to ProductParts table
     const { id } = await ProductParts.create({
       productId,
-      partsId: selectedParts // Store parts as JSON object
+      partsId: localSelectedOptions // Store parts as JSON object
     });
 
     console.log('Product parts added successfully');
@@ -80,7 +79,7 @@ const addProductParts = async(productId, localSelectedOptions) => {
 // Update product parts column
 const updateProductPartsColumn = async (productId, productPartsId) => {
   try {
-    const product = await Product.findOne(productId);
+    const product = await Product.findByPk(productId);
 
     if(product) {
       await product.update({ productPartsId });
@@ -90,7 +89,6 @@ const updateProductPartsColumn = async (productId, productPartsId) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Unable to update product column.' });
   }
 };
 

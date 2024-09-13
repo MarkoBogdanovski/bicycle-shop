@@ -64,7 +64,7 @@ const CustomDropdownButton: React.FC<CustomDropdownButtonProps> = ({
         className={`block rounded-md border-0 pl-5 pr-0 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${minWidth} flex`}
       >
         {selectedOption
-          ? options.find((option) => option.name === selectedOption)?.name
+          ? options.find((option) => option.id === selectedOption)?.name
           : placeholder}
         <ChevronDownIcon
           className={`w-6 ml-auto mr-2 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
@@ -78,7 +78,7 @@ const CustomDropdownButton: React.FC<CustomDropdownButtonProps> = ({
                 <div
                   key={option.id}
                   className="flex items-center px-2 py-1 hover:bg-gray-200 cursor-pointer"
-                  onClick={() => handleOptionClick(option.name)}
+                  onClick={() => handleOptionClick(option.id)}
                 >
                   <span className="text-sm font-medium text-gray-900">
                     {option.name}

@@ -88,8 +88,8 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
                         <input
                           type="checkbox"
                           id={`option-${option.id}`}
-                          checked={selectedOptions.includes(option.name)}
-                          onChange={() => handleOptionChange(option.name)}
+                          checked={selectedOptions.includes(option.id)}
+                          onChange={() => handleOptionChange(option.id)}
                           className="mr-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                         />
                         <label
