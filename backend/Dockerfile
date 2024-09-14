@@ -1,13 +1,13 @@
 
 # Use an official PostgreSQL image as the base image
-FROM postgres:15.2 as postgres
+FROM postgres:15.2 AS postgres
 ENV SERVICE_NAME=postgres
 COPY init_db.sql /docker-entrypoint-initdb.d
 EXPOSE 5432
 
 # Use an official Node.js runtime as the base image
-FROM node:alpine as node
-COPY ./backend ./backend
+FROM node:alpine AS node
+COPY ./ ./backend
 WORKDIR /backend
 COPY package*.json ./app
 RUN npm install -g nodemon

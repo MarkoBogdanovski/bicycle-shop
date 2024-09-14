@@ -1,10 +1,17 @@
 services:
-  web:
+  frontend:
     build:
-      context: .
-      target: node
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3000:80"
+    networks:
+      - backend-api
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     depends_on:
       postgres:
         condition: service_healthy
@@ -19,16 +26,13 @@ services:
       - backend-api
 
   postgres:
-    image: postgres
-    build:
-      context: .
-      target: postgres  # Path to the directory containing the PostgreSQL Dockerfile (if applicable)
+    image: postgres:15.2
     ports:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: shoppw
     volumes:
-    - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
     networks:
       - backend-api
     healthcheck:
@@ -36,7 +40,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
 
 networks:
   backend-api:
