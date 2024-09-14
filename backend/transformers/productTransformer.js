@@ -14,6 +14,7 @@ const transformProductData = async (products) => {
   const productData = products.map(product => {
     const productParts = product.productParts.map(part => JSON.parse(part.partsId)).flat();
     return {
+      id: product.id,
       name: product.name,
       basePrice: product.basePrice,
       categoryId: product.categoryId,

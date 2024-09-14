@@ -8,7 +8,7 @@ const fetchData = async (endpoint: string): Promise<DataItem[]> => {
   return response.json();
 };
 
-const useFetchData = (endpoint: string): UseQueryResult<DataItem[], Error> => {
+const useFetchData = (endpoint: string): UseQueryResult => {
   return useQuery<DataItem[], Error>({
     queryKey: ["data", endpoint],
     queryFn: () => fetchData(endpoint),

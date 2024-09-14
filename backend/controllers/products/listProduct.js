@@ -1,4 +1,4 @@
-const { Product, ProductParts } = require('../../models');
+const { Product, ProductParts, Category } = require('../../models');
 const { transformProductData } = require('../../transformers/productTransformer');
 
 // List products
@@ -24,10 +24,18 @@ const fetchProducts = async () => {
     const products = await Product.findAll({
       include: [
         {
-          model: ProductParts,
-          as: 'productParts', // Ensure this alias matches your association alias
-          attributes: ['partsId'], // Include only the 'partsId' field from ProductParts
+          model: Category,
+          as: 'category',
+          attributes: ['name'],
         },
+        {
+          model: ProductParts,
+          as: 'productParts',
+          attributes: ['partsId'],
+        },
+      ],
+      order: [
+        ['createdAt', 'DESC']
       ]
     });
 

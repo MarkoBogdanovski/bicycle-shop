@@ -1,4 +1,4 @@
-import { GroupedData, Part } from "@/types"; // Adjust the path as needed
+import { Parts, GroupedParts, Product } from "@/types"; // Adjust the path as needed
 
 // This Component takes parts as a list of objects and returns it as a
 // grouped json output where parts are grouped by the part type
@@ -47,16 +47,16 @@ import { GroupedData, Part } from "@/types"; // Adjust the path as needed
 //       ]
 //   }
 // }
-export const convertToGroupedData = (data: Part[]): GroupedData => {
+export const convertToGroupedData = (data: Parts[]): GroupedParts => {
   // Initialize the output object
-  const groupedData: GroupedData = {};
+  const groupedParts: GroupedParts = {};
 
   // Iterate over the data to populate the groupedData
   data.forEach((item) => {
     // Check if the group already exists
-    if (!groupedData[item.type]) {
+    if (!groupedParts[item.type]) {
       // Initialize the group if it doesn't exist
-      groupedData[item.type] = {
+      groupedParts[item.type] = {
         id: item.id,
         label: formatLabel(item.type),
         options: [],
@@ -64,17 +64,21 @@ export const convertToGroupedData = (data: Part[]): GroupedData => {
     }
 
     // Add the item to the appropriate group
-    groupedData[item.type].options.push({
+    groupedParts[item.type].options.push({
       id: item.id,
       name: item.name,
     });
   });
 
-  return groupedData;
+  return groupedParts;
+};
+
+export const classNames = (...classes) => {
+  return classes.filter(Boolean).join(" ");
 };
 
 // Helper function to format the label based on type
-const formatLabel = (type: string): string => {
+export const formatLabel = (type: string): string => {
   switch (type) {
     case "frameType":
       return "Frame Type";
@@ -108,13 +112,51 @@ export const formatPrice = (value: string | number): string => {
 
 // Extract all the ids from selected parts
 export const extractIds = (options: { [key: string]: string[] }) => {
-  // Create an empty array to hold the extracted IDs
   let ids: string[] = [];
 
-  // Iterate over the values of the object and flatten the arrays into one
   Object.values(options).forEach((optionArray) => {
     ids = [...ids, ...optionArray];
   });
 
   return ids;
+};
+
+export const extractParts = (product: Product): GroupedParts => {
+  const groupedParts: GroupedParts = {};
+
+  product.productParts.forEach((part) => {
+    if (!groupedParts[part.type]) {
+      groupedParts[part.type] = [];
+    }
+
+    // Check if the part type is 'rimColor' and add specific properties
+    if (part.type === "rimColor") {
+      const formattedName = part.name.toLowerCase().replace(/\s+/g, "-"); // Convert name to lowercase and replace spaces with hyphens
+      if (formattedName !== "white" && formattedName !== "black") {
+        part = {
+          ...part,
+          class: `bg-${formattedName}-500`,
+          selectedClass: `ring-${formattedName}-400`,
+        };
+      } else {
+        part = {
+          ...part,
+          class: `bg-${formattedName}`,
+          selectedClass: `ring-${formattedName}`,
+        };
+      }
+    }
+
+    // Add a 'crossed over' style if the part is out of stock
+    if (!part.stock) {
+      part = {
+        ...part,
+        class: `${part.class ?? ""} line-through`, // Add 'line-through' if out of stock
+      };
+    }
+
+    groupedParts[part.type].push(part);
+  });
+
+  return groupedParts;
 };

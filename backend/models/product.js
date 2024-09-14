@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.Product, {
+      this.belongsTo(models.Category, {
         foreignKey: 'categoryId',
         as: 'category',
       });
@@ -50,17 +50,32 @@ module.exports = (sequelize, DataTypes) => {
      * @returns {boolean} - Returns true if the configuration is valid, false otherwise.
    */
     validateCombinations(selectedOptions) {
+      // Check if selectedOptions is a valid object
       if (!selectedOptions || typeof selectedOptions !== 'object') {
         throw new Error('Invalid options provided.');
       }
 
-      if (!this.prohibitedCombinations || !Array.isArray(this.prohibitedCombinations)) {
-        return true;
+      // Check if prohibitedCombinations is a valid object
+      if (!this.prohibitedCombinations || typeof this.prohibitedCombinations !== 'object') {
+        return true; // No prohibited combinations, so all are valid
       }
 
-      return !this.prohibitedCombinations.some(({ option1, value1, option2, value2 }) =>
-        selectedOptions[option1] === value1 && selectedOptions[option2] === value2
-      );
+      // Iterate over prohibited combinations
+      return !Object.values(this.prohibitedCombinations).some(({ options, condition }) => {
+        // Ensure options and condition are defined
+        if (!Array.isArray(options) || typeof condition !== 'string') {
+          return false; // Skip invalid entries
+        }
+
+        // Check if the condition is met in the selected options
+        const conditionMet = Object.values(selectedOptions).includes(condition);
+
+        // Check if any of the options are selected
+        const optionsIncluded = options.some(optionId => Object.values(selectedOptions).includes(optionId));
+
+        // If condition is met and any of the options are selected, the combination is prohibited
+        return conditionMet && optionsIncluded;
+      });
     }
   }
 

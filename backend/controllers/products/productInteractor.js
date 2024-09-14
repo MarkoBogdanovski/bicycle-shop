@@ -13,7 +13,6 @@ const validateCombinations = async (req, res, next) => {
   }
 };
 
-
 const calculatePrice = async (req, res, next) => {
   const { productId } = req.params;
   const { selectedOptions } = req.body;

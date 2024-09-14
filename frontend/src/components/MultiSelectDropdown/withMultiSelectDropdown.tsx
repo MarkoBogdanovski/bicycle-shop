@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from "react";
 import MultiSelectDropdown from "./MultiSelectDropdown"; // Adjust the import path as needed
-import { GroupedData } from "@/types"; // Import your DataItem type
+import { GroupedParts } from "@/types"; // Import your DataItem type
 
 interface WithMultiSelectDropdownProps {
-  groupedData: GroupedData[];
+  groupedData: GroupedParts[];
   selectedOptions: string[]; // Ensure this matches MultiSelectDropdown's expected type
   onChange: (groupKey: string, selected: string[]) => void;
 }

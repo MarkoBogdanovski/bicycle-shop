@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { GroupedData } from "@/types";
+import { GroupedParts } from "@/types";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 
 interface MultiSelectDropdownProps {
   id: string;
   label: string;
-  groups: GroupedData[];
+  groups: GroupedParts[];
   selectedOptions: string[];
   onChange: (selected: string[]) => void;
   minWidth: string;

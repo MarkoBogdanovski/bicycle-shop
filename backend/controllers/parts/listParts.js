@@ -18,7 +18,8 @@ const fetchParts = async () => {
     const parts = await Part.findAll({
       where: {
         stock: true
-      }
+      },
+      attributes: ['id', 'name', 'type', 'price', 'stock']
     });
 
     if (!parts) return { part, message: 'No parts available in stock.' };

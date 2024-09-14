@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 interface NotificationProps {
-  type: "error" | "success" | "notification";
+  type: string;
   message: string;
   onClose?: () => void; // Optional close handler
   timeout?: number; // Optional timeout in milliseconds

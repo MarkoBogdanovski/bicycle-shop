@@ -8,7 +8,7 @@ const useHandleForm = (
   localSelectedOptions: Record<string, string[]>,
   combinations: Record<string, object>, // Ensure this is the correct type
   resetForm: () => void,
-  setFormError: (error: string) => void,
+  setNotification: (error: string, message: string) => void,
 ) => {
   const handleForm = useCallback(async () => {
     // Prepare the data to be sent as JSON
@@ -16,13 +16,14 @@ const useHandleForm = (
     const basePrice: number = parseFloat(productPrice.replace(/,/g, ""));
     const formData = {
       productName,
+      categoryId: "8cfd81f4-0a99-4baf-afbc-e7a6f37748d4",
       basePrice,
       options,
       combinations,
     };
 
     if (!productName || !productPrice) {
-      setFormError("Name and price fields are required!");
+      setNotification("notification", "Name and price fields are required!");
       return;
     }
 
@@ -43,11 +44,13 @@ const useHandleForm = (
       const result = await response.json();
       console.log("Form submitted successfully:", result);
 
+      setNotification("success", "Product added successfully.");
+
       // Reset the form after successful submission
       resetForm();
     } catch (error) {
       console.error("Error submitting form:", error);
-      setFormError("An error occurred while submitting the form.");
+      setNotification("error", "An error occurred while submitting the form.");
     }
   }, [
     productName,
@@ -55,7 +58,7 @@ const useHandleForm = (
     localSelectedOptions,
     combinations,
     resetForm,
-    setFormError,
+    setNotification,
   ]);
 
   return handleForm;

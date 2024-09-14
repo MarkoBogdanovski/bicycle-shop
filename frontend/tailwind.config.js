@@ -1,8 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {},
   },
-  plugins: [],
+  safelist: [
+    {
+      pattern: /^bg-/,
+    },
+    {
+      pattern: /^ring-/,
+    },
+  ],
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}", // Adjust this path according to your project structure
+  ],
 };

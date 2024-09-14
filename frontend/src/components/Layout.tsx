@@ -1,21 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { classNames } from "@/utils/helpers";
 
 const navigation = [
   { name: "Dashboard", href: "/", current: false },
   { name: "New Product", href: "/product", current: false },
 ];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 
 interface LayoutProps {
   children: JSX.Element;

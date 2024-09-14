@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import ProhibitedCombinations from "./ProhibitedCombinations/ProhibitedCombinations"; // Import the HOC-wrapped component
 import withMultiSelectDropdown from "./MultiSelectDropdown/withMultiSelectDropdown";
 import { convertToGroupedData } from "@/utils/helpers";
-import { useAddProductContext } from "@/providers/AddProductProvider"; // Import the context hook
+import { useProductContext } from "@/providers/ProductProvider"; // Import the context hook
 
 const MyComponent = (props: { children: React.ReactNode }) => (
   <>{props.children}</>
@@ -25,7 +25,7 @@ const CombinationsManager: React.FC<CombinationsManagerProps> = ({
   handleCombinationsChange,
   handleOptionChange,
 }) => {
-  const { combinations, setCombinations } = useAddProductContext(); // Use the context hook
+  const { combinations, setCombinations } = useProductContext(); // Use the context hook
 
   const addProhibitedCombination = () => {
     const newCombinationId = Object.keys(combinations).length; // Use the length as the new ID
@@ -46,6 +46,8 @@ const CombinationsManager: React.FC<CombinationsManagerProps> = ({
     () => data && convertToGroupedData(data),
     [data],
   );
+
+  console.log(groups);
 
   return (
     <>

@@ -3,13 +3,13 @@ import React from "react";
 import Layout from "@/components/Layout";
 import routes from "@/routes";
 
-import { AddProductProvider } from "@/providers/AddProductProvider";
+import { ProductProvider } from "@/providers/ProductProvider";
 
 const App = (): JSX.Element => {
   return (
-    <AddProductProvider>
+    <ProductProvider>
       <Layout>{routes}</Layout>
-    </AddProductProvider>
+    </ProductProvider>
   );
 };
 

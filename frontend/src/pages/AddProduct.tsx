@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ProductInfoInput from "@/components/ProductInfoInput";
 import CombinationsManager from "@/components/CombinationsManager";
-import { useAddProductContext } from "@/providers/AddProductProvider";
-import useHandleCombinationsChange from "@/hooks/useHandleCombinationsChange"; // Import the custom hook
 import Notification from "@/components/Notification";
+import { useProductContext } from "@/providers/ProductProvider";
+import useHandleCombinationsChange from "@/hooks/useHandleCombinationsChange"; // Import the custom hook
+import useFetchData from "@/hooks/useFetchData";
 
 const AddProduct: React.FC = () => {
+  const { data, error, isLoading, isError } = useFetchData(`parts`);
   const [showNotification, setShowNotification] = React.useState<boolean>(true);
-
   const {
     localSelectedOptions,
     notification,
@@ -15,10 +16,7 @@ const AddProduct: React.FC = () => {
     setCombinations,
     resetForm,
     handleForm,
-    data,
-    isLoading,
-    isError,
-  } = useAddProductContext();
+  } = useProductContext();
   const handleCombinationsChange = useHandleCombinationsChange({
     setCombinations,
   });
@@ -33,10 +31,7 @@ const AddProduct: React.FC = () => {
     }));
   };
 
-  React.useEffect(
-    () => setShowNotification(!!notification.message),
-    [notification],
-  );
+  useEffect(() => setShowNotification(!!notification.message), [notification]);
 
   if (isLoading || !data) return <div>Loading...</div>;
   if (isError) return <div>Error: {error?.message}</div>;
@@ -45,7 +40,7 @@ const AddProduct: React.FC = () => {
     <form>
       {showNotification && (
         <Notification
-          type={notification?.type}
+          type={notification.type}
           message={notification?.message}
           onClose={() => setShowNotification(false)}
         />

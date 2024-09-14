@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useAddProductContext } from "@/providers/AddProductProvider";
+import { useProductContext } from "@/providers/ProductProvider";
 import { formatPrice } from "@/utils/helpers";
 import { debounce } from "lodash";
 
 const ProductInfoInput: React.FC = () => {
   const [price, setPrice] = useState<string>("");
   const { productName, productPrice, setProductName, setProductPrice } =
-    useAddProductContext();
+    useProductContext();
 
   // Debounced function to handle price formatting
   const debouncedHandlePriceChange = useCallback(
