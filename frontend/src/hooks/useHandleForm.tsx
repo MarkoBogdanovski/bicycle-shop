@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { API_URL } from "@/utils/env";
+import { extractIds } from "@/utils/helpers";
 
 const useHandleForm = (
   productName: string,
@@ -11,10 +12,13 @@ const useHandleForm = (
 ) => {
   const handleForm = useCallback(async () => {
     // Prepare the data to be sent as JSON
+    const options: string[] = extractIds(localSelectedOptions);
+    const basePrice: number = parseInt(productPrice);
+
     const formData = {
       productName,
-      productPrice,
-      localSelectedOptions,
+      basePrice,
+      options,
       combinations,
     };
 
@@ -29,6 +33,7 @@ const useHandleForm = (
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify(formData), // Convert formData to JSON
       });
 

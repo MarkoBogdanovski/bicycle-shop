@@ -105,3 +105,16 @@ export const formatPrice = (value: string | number): string => {
     .toFixed(2) // Ensures two decimal places
     .replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Adds commas for thousands
 };
+
+// Extract all the ids from selected parts
+export const extractIds = (options: { [key: string]: string[] }) => {
+  // Create an empty array to hold the extracted IDs
+  let ids: string[] = [];
+
+  // Iterate over the values of the object and flatten the arrays into one
+  Object.values(options).forEach((optionArray) => {
+    ids = [...ids, ...optionArray];
+  });
+
+  return ids;
+};
