@@ -1,9 +1,12 @@
-const { newProduct, testCreate } = require('./products/newProduct');
+const newProduct = require('./products/newProduct');
 const listProduct = require('./products/listProduct');
-// const deleteProduct = require('./products/deleteProduct');
+const { validateCombinations, calculatePrice } = require('./products/productInteractor');
+// const deleteProduct = re÷quire('./products/deleteProduct');
 
 module.exports = {
   newProduct,
   listProduct,
+  validateCombinations,
+  calculatePrice
   // deleteProduct
 }

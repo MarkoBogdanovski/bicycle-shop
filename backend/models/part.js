@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     price: {
-      type: DataTypes.FLOAT, // Price of the part
+      type: DataTypes.INTEGER, // Price of the part
       allowNull: false,
     },
     stock: {

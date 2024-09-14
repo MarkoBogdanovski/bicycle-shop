@@ -14,12 +14,9 @@ module.exports = (sequelize, DataTypes) => {
         as: 'category',
       });
 
-      // New association with Product Parts
-      this.belongsToMany(models.ProductParts, {
-        through: 'ProductParts',
-        as: 'parts',
+      this.hasMany(models.ProductParts, {
         foreignKey: 'productId',
-        otherKey: 'partsId',
+        as: 'productParts'
       });
     }
 
@@ -79,7 +76,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     basePrice: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     categoryId: {

@@ -5,7 +5,7 @@ const newProduct = async (req, res, next) => {
   try {
     const productData = {
       name: req.body.productName,
-      basePrice: req.body.productPrice,
+      basePrice: req.body.basePrice,
       categoryId: req.body.categoryId,
       prohibitedCombinations: req.body.combinations
     };
@@ -37,20 +37,22 @@ const createProduct = async (data) => {
   const addProductParts = async(productId, partIds) => {
     try {
       // Validate input
-      // if (!productId || !partIds) throw new Error('Invalid input');
+      if (!productId || !partIds) throw new Error('Invalid input');
 
       // Fetch all parts to make sure they exist
-      // const parts = await Part.findAll({
-      //   where: { id: partIds },
-      //   attributes: ['id'],
-      // });
+      const parts = await Part.findAll({
+        where: { id: partIds },
+        attributes: ['id'],
+      });
 
-      // if (parts.length !== partIds.length) throw new Error('Some parts do not exist');
+      if (parts.length !== partIds.length) console.log('Some parts do not exist');
+
+      const partsId = JSON.stringify(parts);
 
       // Add the parts to the ProductParts table
-      const { id } =  await ProductParts.create({
+      const { id } = await ProductParts.create({
         productId,
-        partsIds: partIds, // partIds is an array of part UUIDs
+        partsId // Store parts as JSON object
       });
 
       console.log('Product parts added successfully');
@@ -59,7 +61,6 @@ const createProduct = async (data) => {
       console.error('Error adding product parts:', error);
     }
 }
-
 
 // Update product parts column
 const updateProductPartsColumn = async (productId, productPartsId) => {
@@ -77,6 +78,4 @@ const updateProductPartsColumn = async (productId, productPartsId) => {
   }
 };
 
-module.exports = {
-  newProduct
-}
+module.exports = newProduct

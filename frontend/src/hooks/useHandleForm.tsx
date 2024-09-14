@@ -13,8 +13,7 @@ const useHandleForm = (
   const handleForm = useCallback(async () => {
     // Prepare the data to be sent as JSON
     const options: string[] = extractIds(localSelectedOptions);
-    const basePrice: number = parseInt(productPrice);
-
+    const basePrice: number = parseFloat(productPrice.replace(/,/g, ""));
     const formData = {
       productName,
       basePrice,
