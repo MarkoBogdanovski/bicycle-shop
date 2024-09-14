@@ -15,9 +15,7 @@ const listProduct = async (req, res, next) => {
 // Feth Products
 const fetchProducts = async () => {
   try {
-    const products = await Product.findAll({
-      where: { isAvailable: true },
-    });
+    const products = await Product.findAll();
 
     if (products) {
       return products;

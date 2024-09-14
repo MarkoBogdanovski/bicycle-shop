@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         through: 'ProductParts',
         as: 'parts',
         foreignKey: 'productId',
-        otherKey: 'partId',
+        otherKey: 'partsId',
       });
     }
 

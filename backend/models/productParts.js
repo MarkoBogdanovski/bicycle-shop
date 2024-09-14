@@ -9,12 +9,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'productId',
         as: 'product',
       });
-
-      // Association with Part
-      this.belongsTo(models.Part, {
-        foreignKey: 'partsId',
-        as: 'part',
-      });
     }
   }
 
@@ -30,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     partsId: {
-      type: DataTypes.ARRAY,
+      type: DataTypes.JSONB,
       allowNull: false,
     },
   }, {

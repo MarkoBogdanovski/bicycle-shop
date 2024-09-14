@@ -4,7 +4,7 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.addColumn('Products', 'productPartsId', {
-      type: Sequelize.JSONB,
+      type: Sequelize.UUID,
       allowNull: true, // Or set to false if the column should be required
     });
 

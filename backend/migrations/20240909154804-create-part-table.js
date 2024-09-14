@@ -36,6 +36,13 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
       },
+    },{
+      indexes: [
+        {
+          unique: true,
+          fields: ['id'] // Create a unique index on the 'id' column
+        }
+      ]
     });
   },
 

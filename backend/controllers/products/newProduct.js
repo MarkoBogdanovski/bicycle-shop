@@ -1,4 +1,4 @@
-const { Product, ProductParts, Parts  } = require('../../models');
+const { Product, ProductParts, Part } = require('../../models');
 
 // Create new product
 const newProduct = async (req, res, next) => {
@@ -11,7 +11,7 @@ const newProduct = async (req, res, next) => {
     };
 
     const { id } = await createProduct(productData);
-    const productPartsId = await addProductParts(id, req.body.localSelectedOptions);
+    const productPartsId = await addProductParts(id, req.body.options);
     const response = await updateProductPartsColumn(id, productPartsId)
 
     res.status(201).json({response});
@@ -34,47 +34,32 @@ const createProduct = async (data) => {
  * @param {string} productId - The ID of the product to which parts are being added.
  * @param {object} localSelectedOptions - The selected options with parts.
  */
-const addProductParts = async(productId, localSelectedOptions) => {
-  try {
-    // Validate input
-    // if (!productId || !localSelectedOptions || typeof localSelectedOptions !== 'object') {
-    //   throw new Error('Invalid input');
-    // }
+  const addProductParts = async(productId, partIds) => {
+    try {
+      // Validate input
+      // if (!productId || !partIds) throw new Error('Invalid input');
 
-    // // Gather selected parts for the product
-    // const selectedParts = {};
+      // Fetch all parts to make sure they exist
+      // const parts = await Part.findAll({
+      //   where: { id: partIds },
+      //   attributes: ['id'],
+      // });
 
-    // for (const [partType, options] of Object.entries(localSelectedOptions)) {
-    //   if (options.length > 0) {
-    //     const partIds = [];
+      // if (parts.length !== partIds.length) throw new Error('Some parts do not exist');
 
-    //     for (const option of options) {
-    //       const part = await Parts.findOne({ where: { name: option } });
-    //       if (part) {
-    //         partIds.push(part.id);
-    //       } else {
-    //         console.warn(`Part not found: ${option}`);
-    //       }
-    //     }
+      // Add the parts to the ProductParts table
+      const { id } =  await ProductParts.create({
+        productId,
+        partsIds: partIds, // partIds is an array of part UUIDs
+      });
 
-    //     if (partIds.length > 0) {
-    //       selectedParts[partType] = partIds;
-    //     }
-    //   }
-    // }
-
-    // Add record to ProductParts table
-    const { id } = await ProductParts.create({
-      productId,
-      partsId: localSelectedOptions // Store parts as JSON object
-    });
-
-    console.log('Product parts added successfully');
-    return id;
-  } catch (error) {
-    console.error('Error adding product parts:', error);
-  }
+      console.log('Product parts added successfully');
+      return id;
+    } catch (error) {
+      console.error('Error adding product parts:', error);
+    }
 }
+
 
 // Update product parts column
 const updateProductPartsColumn = async (productId, productPartsId) => {

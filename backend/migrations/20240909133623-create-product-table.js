@@ -16,7 +16,6 @@ module.exports = {
       },
       categoryId: {
         type: Sequelize.UUID,
-        allowNull: false,
         references: {
           model: 'Categories', // Name of the referenced table
           key: 'id', // Column in the referenced table
@@ -29,7 +28,7 @@ module.exports = {
         allowNull: true,
       },
       basePrice: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.NUMBER,
         allowNull: false,
       },
       createdAt: {
