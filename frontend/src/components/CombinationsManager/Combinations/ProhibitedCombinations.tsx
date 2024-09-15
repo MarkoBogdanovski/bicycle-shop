@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import MultiSelectDropdown from "../MultiSelectDropdown/MultiSelectDropdown"; // Adjust the import path
-import withProhibitedCombinations from "./withProhibitedCombinations";
-import Dropdown from "../Dropdown";
+import MultiSelectDropdown from "../../MultiSelectDropdown/MultiSelectDropdown"; // Adjust the import path
+import Dropdown from "../../Dropdown";
 
 interface ProhibitedCombinationsProps {
   data: { id: string; name: string }[]; // Adjust the type based on your data structure
@@ -52,7 +51,7 @@ const ProhibitedCombinations: React.FC<ProhibitedCombinationsProps> = ({
           value={localCondition}
           onChange={handleConditionChange}
           options={data}
-          minWidth="w-48"
+          minWidth="w-60"
           placeholder="Select an option"
         />
       </div>
@@ -68,4 +67,4 @@ const ProhibitedCombinations: React.FC<ProhibitedCombinationsProps> = ({
   );
 };
 
-export default withProhibitedCombinations(ProhibitedCombinations);
+export default ProhibitedCombinations;

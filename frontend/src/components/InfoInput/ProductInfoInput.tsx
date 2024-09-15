@@ -33,7 +33,7 @@ const ProductInfoInput: React.FC = () => {
       <InfoInput
         name={productName}
         price={price}
-        onNameChange={(newName) => setProductName(newName)}
+        onNameChange={setProductName}
         onPriceChange={handlePriceChange}
       />
     </>

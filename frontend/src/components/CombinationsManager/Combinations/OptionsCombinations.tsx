@@ -1,20 +1,25 @@
 import React, { useCallback, useState } from "react";
-import Dropdown from "../Dropdown";
+import Dropdown from "../../Dropdown";
 import { debounce } from "lodash";
 import { formatPrice } from "@/utils/helpers";
 
 interface OptionsCombinationsProps {
-  data: { id: string; name: string }[]; // Adjust the type based on your data structure
-  condition: string; // Single selected option for the `select` element
-  onConditionChange: (selected: string) => void; // Callback for handling change in `select`
+  data: { id: string; name: string }[];
+  condition: string;
+  price: string;
+  onConditionChange: (selected: string) => void;
+  onPriceChange: (price: string) => void;
 }
 
 const OptionsCombinations: React.FC<OptionsCombinationsProps> = ({
   data,
+  condition,
+  price,
   onConditionChange,
+  onPriceChange,
 }) => {
-  const [localCondition, setLocalCondition] = useState<string>("");
-  const [price, setPrice] = useState<string>("");
+  const [localCondition, setLocalCondition] = useState<string>(condition);
+  const [localPrice, setLocalPrice] = useState<string>("");
 
   const handleConditionChange = (value: string) => {
     setLocalCondition(value);
@@ -24,15 +29,16 @@ const OptionsCombinations: React.FC<OptionsCombinationsProps> = ({
   const debouncedHandlePriceChange = useCallback(
     debounce((inputValue: string) => {
       const formattedPrice = formatPrice(inputValue);
-      setPrice(formattedPrice);
-    }, 500), // 500ms debounce delay
-    [setPrice], // Include setProductPrice in dependencies
+      setLocalPrice(formattedPrice);
+      onPriceChange(formattedPrice);
+    }, 500),
+    [onPriceChange],
   );
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-    setPrice(inputValue);
-    debouncedHandlePriceChange(inputValue); // Call debounced function
+    setLocalPrice(inputValue);
+    debouncedHandlePriceChange(inputValue);
   };
 
   return (
@@ -42,12 +48,12 @@ const OptionsCombinations: React.FC<OptionsCombinationsProps> = ({
           Condition
         </label>
         <Dropdown
-          id="country"
-          name="country"
+          id="condition"
+          name="condition"
           value={localCondition}
           onChange={handleConditionChange}
           options={data}
-          minWidth="w-48"
+          minWidth="w-60"
           placeholder="Select an option"
         />
       </div>
@@ -64,7 +70,7 @@ const OptionsCombinations: React.FC<OptionsCombinationsProps> = ({
             id="price"
             name="price"
             type="text"
-            value={price}
+            value={localPrice}
             onChange={handlePriceChange}
             className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />

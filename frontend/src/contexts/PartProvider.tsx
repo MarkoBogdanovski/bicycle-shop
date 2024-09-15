@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { PartContextType } from "@/types";
-import useHandleForm from "@/hooks/useHandleForm"; // Import the custom hook
+import { useAddProduct } from "@/hooks"; // Import the custom hook
 
 // Create context with undefined as default value
 const PartContext = createContext<PartContextType | undefined>(undefined);
@@ -11,7 +11,7 @@ export const PartProvider: React.FC<{ children: React.ReactNode }> = ({
   const [localSelectedOptions, setLocalSelectedOptions] = useState<
     Record<string, string[]>
   >({});
-  const [combinations, setCombinations] = useState<number[]>([]); // Changed initial value to empty array
+  const [combinations, setCombinations] = useState<number[]>([0]); // Changed initial value to empty array
   const [productName, setProductName] = useState<string>("");
   const [productPrice, setProductPrice] = useState<string>("");
   const [notification, setNotification] = useState<Record<string, string>>({});
@@ -30,7 +30,7 @@ export const PartProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // Use the handleForm hook
-  const handleForm = useHandleForm(
+  const handleForm = useAddProduct(
     productName,
     productPrice,
     localSelectedOptions,

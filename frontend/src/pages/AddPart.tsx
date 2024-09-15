@@ -1,20 +1,39 @@
 import React, { useEffect } from "react";
+import { OptionsCombinations } from "@/components/CombinationsManager";
 import PartInfoInput from "@/components/InfoInput/PartInfoInput";
 import Notification from "@/components/Notification";
-import { useProductContext } from "@/contexts/ProductProvider";
-import { useFetchData } from "@/hooks";
-import OptionsCombinationsManager from "@/components/OptionsCombinationsManager";
+import { useFetchData, useOptionsCombinations } from "@/hooks";
+import { usePartContext } from "@/contexts/PartProvider";
 
 const AddPart: React.FC = () => {
   const { data, error, isLoading, isError } = useFetchData(`parts`);
   const [showNotification, setShowNotification] = React.useState<boolean>(true);
-  const { localSelectedOptions, notification, resetForm, handleForm } =
-    useProductContext();
-
+  const {
+    combinations,
+    setCombinations,
+    localSelectedOptions,
+    notification,
+    resetForm,
+    handleForm,
+  } = usePartContext();
+  const handleCombinationsChange = useOptionsCombinations({
+    setCombinations,
+  });
   useEffect(() => setShowNotification(!!notification.message), [notification]);
 
   if (isLoading || !data) return <div>Loading...</div>;
   if (isError) return <div>Error: {error?.message}</div>;
+
+  const handleConditionChange = (
+    key: string | number,
+    newCondition: string,
+  ) => {
+    handleCombinationsChange(key, { condition: newCondition });
+  };
+
+  const handlePriceChange = (key: string | number, newPrice: string) => {
+    handleCombinationsChange(key, { price: newPrice });
+  };
 
   return (
     <form>
@@ -32,9 +51,11 @@ const AddPart: React.FC = () => {
         <div className="space-y-5">
           <PartInfoInput />
 
-          <OptionsCombinationsManager
+          <OptionsCombinations
             data={data}
             localSelectedOptions={localSelectedOptions}
+            onConditionChange={handleConditionChange}
+            onPriceChange={handlePriceChange} // Ensure this is provided
           />
         </div>
       </div>

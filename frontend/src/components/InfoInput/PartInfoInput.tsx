@@ -3,9 +3,19 @@ import { usePartContext } from "@/contexts/PartProvider";
 import { formatPrice } from "@/utils/helpers";
 import { debounce } from "lodash";
 import InfoInput from "./InfoInput"; // Import the updated InfoInput component
+import Dropdown from "../Dropdown";
+
+const partTypes = [
+  { id: "frameType", name: "Frame Type" },
+  { id: "frameFinish", name: "Frame Finish" },
+  { id: "wheels", name: "Wheels" },
+  { id: "rimColor", name: "Rim Color" },
+  { id: "chain", name: "Chain" },
+];
 
 const PartInfoInput: React.FC = () => {
   const [price, setPrice] = useState<string>("");
+  const [type, setType] = useState<string>("");
   const { productName, productPrice, setProductName, setProductPrice } =
     usePartContext();
 
@@ -35,7 +45,25 @@ const PartInfoInput: React.FC = () => {
         price={price}
         onNameChange={(newName) => setProductName(newName)}
         onPriceChange={handlePriceChange}
-      />
+      >
+        <div className="col-span-3 w-full">
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium leading-6 text-gray-900 mb-1"
+          >
+            Product Type
+          </label>
+          <Dropdown
+            id="type"
+            name="Type"
+            value={type}
+            onChange={setType}
+            options={partTypes}
+            minWidth="w-60"
+            placeholder="Select an option"
+          />
+        </div>
+      </InfoInput>
     </>
   );
 };

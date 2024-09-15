@@ -1,6 +1,6 @@
 import React from "react";
-import ProhibitedCombinations from "./ProhibitedCombinations/ProhibitedCombinations"; // Import the HOC-wrapped component
-import withMultiSelectDropdown from "./MultiSelectDropdown/withMultiSelectDropdown";
+import ProhibitedCombinations from "./Combinations/ProhibitedCombinations"; // Import the HOC-wrapped component
+import withMultiSelectDropdown from "@/components/MultiSelectDropdown/withMultiSelectDropdown";
 import { convertToGroupedData } from "@/utils/helpers";
 import { useProductContext } from "@/contexts/ProductProvider"; // Import the context hook
 

@@ -8,14 +8,14 @@ interface Combinations {
   };
 }
 
-interface UseHandleCombinationsChangeParams {
+interface UseProhibitedCombinationsParams {
   setCombinations: Dispatch<SetStateAction<Combinations>>; // Ensure this matches
 }
 
 // Handle combinations for all the multiple instances of prohibited combinations
-const useHandleCombinationsChange = ({
+const useProhibitedCombinations = ({
   setCombinations,
-}: UseHandleCombinationsChangeParams) => {
+}: UseProhibitedCombinationsParams) => {
   return useCallback(
     (
       groupKey: string | number,
@@ -42,4 +42,4 @@ const useHandleCombinationsChange = ({
   );
 };
 
-export default useHandleCombinationsChange;
+export default useProhibitedCombinations;

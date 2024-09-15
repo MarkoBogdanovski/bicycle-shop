@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import ProductInfoInput from "@/components/InfoInput/ProductInfoInput";
-import ProhibitedCombinationsManager from "@/components/ProhibitedCombinationsManager";
+import { ProhibitedCombinations } from "@/components/CombinationsManager";
 import Notification from "@/components/Notification";
 import { useProductContext } from "@/contexts/ProductProvider";
-import { useFetchData, useHandleCombinationsChange } from "@/hooks"; // Import the custom hook
+import { useFetchData, useProhibitedCombinations } from "@/hooks"; // Import the custom hook
 
 const AddProduct: React.FC = () => {
   const { data, error, isLoading, isError } = useFetchData(`parts`);
@@ -16,7 +16,7 @@ const AddProduct: React.FC = () => {
     resetForm,
     handleForm,
   } = useProductContext();
-  const handleCombinationsChange = useHandleCombinationsChange({
+  const handleCombinationsChange = useProhibitedCombinations({
     setCombinations,
   });
 
@@ -51,7 +51,7 @@ const AddProduct: React.FC = () => {
         <div className="space-y-5">
           <ProductInfoInput />
 
-          <ProhibitedCombinationsManager
+          <ProhibitedCombinations
             data={data}
             localSelectedOptions={localSelectedOptions}
             handleCombinationsChange={handleCombinationsChange}

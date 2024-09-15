@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import ProductItem from "@/components/Product";
-import ProductList from "@/components/Product/ProductList";
+import { ProductItem, ProductList } from "@/components/Product";
 import { useFetchData } from "@/hooks";
 import { Product } from "@/types";
 

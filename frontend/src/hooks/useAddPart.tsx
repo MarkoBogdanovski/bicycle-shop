@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { API_URL } from "@/utils/env";
 import { extractIds } from "@/utils/helpers";
 
-const useHandleForm = (
+const useAddPart = (
   productName: string,
   productPrice: string,
   localSelectedOptions: Record<string, string[]>,
@@ -64,4 +64,4 @@ const useHandleForm = (
   return handleForm;
 };
 
-export default useHandleForm;
+export default useAddPart;

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { ProductContextType } from "@/types";
-import useHandleForm from "@/hooks/useHandleForm"; // Import the custom hook
+import { useAddProduct } from "@/hooks"; // Import the custom hook
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
@@ -27,7 +27,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({
     setNotification({ type, message });
   };
   // Use the handleForm hook
-  const handleForm = useHandleForm(
+  const handleForm = useAddProduct(
     productName,
     productPrice,
     localSelectedOptions,
