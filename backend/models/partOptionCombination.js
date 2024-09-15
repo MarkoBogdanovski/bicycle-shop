@@ -5,15 +5,6 @@ module.exports = (sequelize, DataTypes) => {
   class PartOptionCombination extends Model {
     static associate(models) {
       // Define the relationship between PartOptionCombination and Part
-      this.belongsTo(models.Part, {
-        foreignKey: 'partId',
-        as: 'part' // Refers to the main part
-      });
-
-      this.belongsTo(models.Part, {
-        foreignKey: 'optionId',
-        as: 'option' // Refers to the option/secondary part
-      });
     }
   }
 

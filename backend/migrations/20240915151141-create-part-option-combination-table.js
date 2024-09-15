@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('PartOptionCombination', {
+    await queryInterface.createTable('PartOptionCombinations', {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -13,29 +13,25 @@ module.exports = {
       partId: {
         type: Sequelize.UUID,
         allowNull: false,
-        references: {
-          model: 'Part', // Name of the referenced table
-          key: 'id', // Column in the referenced table
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
       optionId: {
         type: Sequelize.UUID,
         allowNull: false,
-        references: {
-          model: 'Part', // Name of the referenced table
-          key: 'id', // Column in the referenced table
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
       price: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      }
     }, {
-      timestamps: false,
+      timestamps: true,
       indexes: [
         {
           unique: true,
@@ -46,6 +42,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('PartOptionCombination');
+    await queryInterface.dropTable('PartOptionCombinations');
   }
 };

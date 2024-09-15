@@ -7,20 +7,8 @@ module.exports = (sequelize, DataTypes) => {
       // Define the many-to-many relationship between Part and ProductParts
       this.belongsToMany(models.Product, {
         through: 'ProductParts',
-        foreignKey: 'partId',
+        foreignKey: 'partsId',
         as: 'products'
-      });
-
-      // Define the one-to-many relationship with PartOptionCombination for partId
-      this.hasMany(models.PartOptionCombination, {
-        foreignKey: 'partId',
-        as: 'partCombinations'
-      });
-
-      // Define the one-to-many relationship with PartOptionCombination for optionId
-      this.hasMany(models.PartOptionCombination, {
-        foreignKey: 'optionId',
-        as: 'optionCombinations'
       });
     }
   }

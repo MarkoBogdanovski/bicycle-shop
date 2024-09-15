@@ -39,25 +39,14 @@ const addPartOptionCombinations = async (partId, selectedOptions) => {
     // Validate input
     if (!selectedOptions || !partId) throw new Error('Invalid input');
 
-    // Fetch all conditions to make sure they exist
-    const conditionIds = Object.values(selectedOptions).map(option => option.condition);
-    const conditions = await Condition.findAll({
-      where: { id: conditionIds },
-      attributes: ['id'],
-    });
-
-    // Check if all conditions exist
-    if (conditions.length !== conditionIds.length) {
-      console.log('Some conditions do not exist');
-      return;
-    }
-
     // Prepare records to insert
-    const records = Object.entries(combinations).map(([key, { condition, price }]) => ({
+    const records = Object.entries(selectedOptions).map(([key, { condition, price }]) => ({
       partId,
-      conditionId: condition,
+      optionId: condition,
       price: parseFloat(price),
     }));
+
+    console.log(records);
 
     // Add the combinations to the PartOptionCombination table
     await PartOptionCombination.bulkCreate(records);
