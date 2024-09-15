@@ -43,7 +43,7 @@ const addPartOptionCombinations = async (partId, selectedOptions) => {
     const records = Object.entries(selectedOptions).map(([key, { condition, price }]) => ({
       partId,
       optionId: condition,
-      price: parseFloat(price),
+      price,
     }));
 
     console.log(records);

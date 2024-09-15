@@ -15,11 +15,12 @@ const validateCombinations = async (req, res, next) => {
 
 const calculatePrice = async (req, res, next) => {
   const { productId } = req.params;
-  const { selectedOptions } = req.body;
+  const partsIds = Object.values(req.body).map(id => id);
 
   try {
     const product = await Product.findByPk(productId);
-    const totalPrice = await product.calculatePrice(selectedOptions);
+    const totalPrice = await product.calculatePrice(partsIds);
+
     res.json({ totalPrice });
   } catch (error) {
     res.status(500).json({ error: error.message });

@@ -32,11 +32,7 @@ const useProduct = ({ product }: UseProductProps) => {
           setIsValid(valid);
           if (valid) {
             // Calculate price
-            const price = await calculatePrice(
-              product.basePrice,
-              updatedOptions,
-              product.productParts,
-            );
+            const price = await calculatePrice(product.id, updatedOptions);
             setTotalPrice(price);
           } else {
             setTotalPrice(product.basePrice); // Reset to base price if not valid

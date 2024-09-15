@@ -1,5 +1,5 @@
 'use strict';
-const { Model } = require('sequelize');
+const { Model, Op } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
@@ -21,49 +21,51 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     /**
-     * Calculates the total price based on selected options and price dependencies.
-     * @param {Object} selectedOptions - User's selected configuration.
-     * @returns {number} - The total price of the product.
-    */
-    /**
      * Calculates the total price based on selected parts and price dependencies.
      * @param {Array} selectedParts - Array of selected part IDs.
      * @returns {number} - The total price of the product.
      */
-    async calculatePrice(selectedParts) {
-      if (!Array.isArray(selectedParts) || selectedParts.length === 0) {
-        throw new Error('Selected parts must be a non-empty array.');
-      }
+    async calculatePrice(partIds) {
+      // Filter out any empty strings or invalid entries from the selectedOptions array
+      const validParts = partIds.filter(partId => partId && typeof partId === 'string');
 
-      // Check for valid part combinations
-      const combinations = await sequelize.models.PartOptionCombination.findAll({
+      // If no valid parts are selected, return the product's base price
+      if (validParts.length === 0) return this.basePrice;
+
+      // Check for a valid part combination
+      const combination = await sequelize.models.PartOptionCombination.findOne({
         where: {
-          partId: selectedParts[0], // First part ID in combination
-          optionId: selectedParts[1], // Second part ID in combination
-        },
+          partId: {
+            [Op.in]: validParts,
+          },
+          optionId: {
+            [Op.in]: validParts,
+          }
+        }
       });
 
-      if (combinations.length > 0) {
-        // Return the price from the matching combination
-        return combinations[0].price;
+      let combinationPrice = 0;
+      let remainingParts = validParts;
+
+      if (combination) {
+        combinationPrice = combination.price;
+        remainingParts = validParts.filter(partId => partId !== combination.partId && partId !== combination.optionId); // Exclude the combination parts from remaining parts
       }
 
-      // If no combination price, calculate based on individual part prices
+      // Calculate the total price of the remaining parts
       const parts = await sequelize.models.Part.findAll({
         where: {
-          id: selectedParts,
+          id: remainingParts,
         },
       });
 
-      if (parts.length !== selectedParts.length) {
-        throw new Error('One or more selected parts are not found.');
-      }
+      if (parts.length !== remainingParts.length) throw new Error('One or more selected parts are not found.');
 
-      const totalPrice = parts.reduce((total, part) => total + part.price, 0);
+      const remainingPartsPrice = parts.reduce((total, part) => total + part.price, 0);
 
-      return totalPrice;
+      // Return the sum of the base price, combination price, and remaining parts' prices
+      return this.basePrice + combinationPrice + remainingPartsPrice;
     }
-
 
     /**
      * Validates if the selected configuration has any prohibited combinations.
@@ -72,21 +74,15 @@ module.exports = (sequelize, DataTypes) => {
    */
     validateCombinations(selectedOptions) {
       // Check if selectedOptions is a valid object
-      if (!selectedOptions || typeof selectedOptions !== 'object') {
-        throw new Error('Invalid options provided.');
-      }
+      if (!selectedOptions || typeof selectedOptions !== 'object') throw new Error('Invalid options provided.');
 
       // Check if prohibitedCombinations is a valid object
-      if (!this.prohibitedCombinations || typeof this.prohibitedCombinations !== 'object') {
-        return true; // No prohibited combinations, so all are valid
-      }
+      if (!this.prohibitedCombinations || typeof this.prohibitedCombinations !== 'object') return true; // No combinations
 
       // Iterate over prohibited combinations
       return !Object.values(this.prohibitedCombinations).some(({ options, condition }) => {
         // Ensure options and condition are defined
-        if (!Array.isArray(options) || typeof condition !== 'string') {
-          return false; // Skip invalid entries
-        }
+        if (!Array.isArray(options) || typeof condition !== 'string') return false; // Skip invalid entries
 
         // Check if the condition is met in the selected options
         const conditionMet = Object.values(selectedOptions).includes(condition);

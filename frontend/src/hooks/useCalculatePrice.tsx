@@ -1,23 +1,27 @@
-import { Parts } from "@/types";
 import { useCallback } from "react";
+import { API_URL } from "@/utils/env";
 
 const useCalculatePrice = () => {
   const calculatePrice = useCallback(
-    (
-      basePrice: number,
-      selectedOptions: Record<string, string>,
-      parts: Parts[],
-    ) => {
-      // Calculate price based on selected options
-      let total = basePrice;
-      for (const key in selectedOptions) {
-        const selectedId = selectedOptions[key];
-        const part = parts.find((p) => p.id === selectedId);
-        if (part) {
-          total += part.price;
-        }
+    async (productId: string, selectedOptions: object) => {
+      try {
+        const response = await fetch(
+          `${API_URL}/products/${productId}/calculatePrice`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ selectedOptions }),
+          },
+        );
+
+        const data = await response.json();
+        return data.totalPrice;
+      } catch (error) {
+        console.error("Error validating combinations:", error);
+        return false;
       }
-      return total;
     },
     [],
   );
