@@ -129,6 +129,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
+    tableName: 'products',
     modelName: 'Product',
     timestamps: true, // Include timestamps if needed
   });

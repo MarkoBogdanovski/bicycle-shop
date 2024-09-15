@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // Define the many-to-many relationship between Part and ProductParts
       this.belongsToMany(models.Product, {
-        through: 'ProductParts',
+        through: 'productParts',
         foreignKey: 'partsId',
         as: 'products'
       });
@@ -38,6 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
+    tableName: 'parts',
     modelName: 'Part',
     timestamps: true,
   });

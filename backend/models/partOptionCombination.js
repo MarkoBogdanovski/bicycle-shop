@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
+    tableName: 'partOptionCombinations',
     modelName: 'PartOptionCombination',
     timestamps: true,
   });

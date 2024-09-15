@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('Products', {
+    await queryInterface.createTable('products', {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -17,7 +17,7 @@ module.exports = {
       categoryId: {
         type: Sequelize.UUID,
         references: {
-          model: 'Categories', // Name of the referenced table
+          model: 'categories', // Name of the referenced table
           key: 'id', // Column in the referenced table
         },
         onUpdate: 'CASCADE',
@@ -53,6 +53,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('Products');
+    await queryInterface.dropTable('products');
   }
 };

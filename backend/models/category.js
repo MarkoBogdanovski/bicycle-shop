@@ -24,12 +24,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
     },
-     ame: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false
     }
   }, {
     sequelize,
+    tableName: 'categories',
     modelName: 'Category',
     timestamps: true
   });
