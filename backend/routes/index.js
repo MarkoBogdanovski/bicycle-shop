@@ -20,6 +20,8 @@ router.post('/api/products/:productId/calculatePrice', productController.calcula
 // Route for listing all products
 router.get('/api/parts', partsController.listParts);
 
+router.post('/api/parts', partsController.newPart);
+
 
 
 module.exports = router; // export to use in server.js

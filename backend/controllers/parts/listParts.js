@@ -1,5 +1,4 @@
 const { Part } = require('../../models');
-const { Op } = require('sequelize');
 
 const listParts = async (req, res, next) => {
   try {

@@ -15,17 +15,22 @@ const partTypes = [
 
 const PartInfoInput: React.FC = () => {
   const [price, setPrice] = useState<string>("");
-  const [type, setType] = useState<string>("");
-  const { productName, productPrice, setProductName, setProductPrice } =
-    usePartContext();
+  const {
+    partType,
+    partName,
+    partPrice,
+    setPartType,
+    setPartName,
+    setPartPrice,
+  } = usePartContext();
 
   // Debounced function to handle price formatting
   const debouncedHandlePriceChange = useCallback(
     debounce((inputValue: string) => {
       const formattedPrice = formatPrice(inputValue);
-      setProductPrice(formattedPrice);
+      setPartPrice(formattedPrice);
     }, 500), // 500ms debounce delay
-    [setProductPrice], // Include setProductPrice in dependencies
+    [setPartPrice], // Include setProductPrice in dependencies
   );
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,15 +40,15 @@ const PartInfoInput: React.FC = () => {
   };
 
   useEffect(() => {
-    setPrice(productPrice);
-  }, [productPrice]);
+    setPrice(partPrice);
+  }, [partPrice]);
 
   return (
     <>
       <InfoInput
-        name={productName}
+        name={partName}
         price={price}
-        onNameChange={(newName) => setProductName(newName)}
+        onNameChange={(newName) => setPartName(newName)}
         onPriceChange={handlePriceChange}
       >
         <div className="col-span-3 w-full">
@@ -56,8 +61,8 @@ const PartInfoInput: React.FC = () => {
           <Dropdown
             id="type"
             name="Type"
-            value={type}
-            onChange={setType}
+            value={partType}
+            onChange={setPartType}
             options={partTypes}
             minWidth="w-60"
             placeholder="Select an option"

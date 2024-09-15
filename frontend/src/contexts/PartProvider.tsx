@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { PartContextType } from "@/types";
-import { useAddProduct } from "@/hooks"; // Import the custom hook
+import { useAddPart } from "@/hooks"; // Import the custom hook
 
 // Create context with undefined as default value
 const PartContext = createContext<PartContextType | undefined>(undefined);
@@ -8,20 +8,18 @@ const PartContext = createContext<PartContextType | undefined>(undefined);
 export const PartProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [localSelectedOptions, setLocalSelectedOptions] = useState<
-    Record<string, string[]>
-  >({});
   const [combinations, setCombinations] = useState<number[]>([0]); // Changed initial value to empty array
-  const [productName, setProductName] = useState<string>("");
-  const [productPrice, setProductPrice] = useState<string>("");
+  const [partName, setPartName] = useState<string>("");
+  const [partPrice, setPartPrice] = useState<string>("");
+  const [partType, setPartType] = useState<string>("");
   const [notification, setNotification] = useState<Record<string, string>>({});
 
   // Reset form function after successful submission
   const resetForm = () => {
-    setProductName("");
-    setProductPrice("");
-    setLocalSelectedOptions({});
-    setCombinations([]);
+    setPartName("");
+    setPartPrice("");
+    setPartType("");
+    setCombinations([0]);
   };
 
   const handleNotification = (type: string, message: string) => {
@@ -30,10 +28,10 @@ export const PartProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // Use the handleForm hook
-  const handleForm = useAddProduct(
-    productName,
-    productPrice,
-    localSelectedOptions,
+  const handleForm = useAddPart(
+    partName,
+    partPrice,
+    partType,
     combinations,
     resetForm,
     handleNotification,
@@ -41,15 +39,15 @@ export const PartProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const value: PartContextType = {
     // Ensure type matches PartContextType
-    localSelectedOptions,
     combinations,
-    productName,
-    productPrice,
+    partName,
+    partPrice,
+    partType,
     notification,
-    setLocalSelectedOptions,
     setCombinations,
-    setProductPrice,
-    setProductName,
+    setPartPrice,
+    setPartName,
+    setPartType,
     handleForm,
     resetForm,
     handleNotification,

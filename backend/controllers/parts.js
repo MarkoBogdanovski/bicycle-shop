@@ -1,7 +1,7 @@
 const listParts = require('./parts/listParts');
-// const deleteProduct = require('./products/deleteProduct');
+const newPart = require('./parts/newPart');
 
 module.exports = {
   listParts,
-  // deleteProduct
+  newPart
 }
