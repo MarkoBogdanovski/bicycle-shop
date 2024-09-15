@@ -7,6 +7,11 @@ const listProduct = async (req, res, next) => {
     // Fetch products with related ProductParts
     const products = await fetchProducts();
 
+    if (products.length === 0) {
+      // Return a 404 response if no products are found
+      return res.status(200).json({ products: [], error: 'No products available in stock.' });
+    }
+
     // Transform product data and wait for the transformation to complete
     const transformedData = await transformProductData(products);
 
@@ -18,7 +23,6 @@ const listProduct = async (req, res, next) => {
   }
 };
 
-// Fetch Products with Relations
 const fetchProducts = async () => {
   try {
     const products = await Product.findAll({
@@ -39,16 +43,12 @@ const fetchProducts = async () => {
       ]
     });
 
-    if (products.length > 0) {
-      return products;
-    } else {
-      throw new Error('No products available in stock.');
-    }
+    // Return the products, even if it's an empty array
+    return products;
   } catch (error) {
     console.error(error);
     throw new Error('Unable to find products.'); // Throwing error instead of using `res` inside the function
   }
-};
-
+}
 
 module.exports = listProduct;

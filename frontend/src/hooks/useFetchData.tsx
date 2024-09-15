@@ -13,7 +13,7 @@ const useFetchData = (endpoint: string): UseQueryResult => {
     queryKey: ["data", endpoint],
     queryFn: () => fetchData(endpoint),
     staleTime: 60000, // 1 minute
-    retry: 3, // Retry failed requests up to 3 times
+    retry: 2, // Retry failed requests up to 3 times
   });
 };
 

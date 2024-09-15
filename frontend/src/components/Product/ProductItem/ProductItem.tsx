@@ -4,7 +4,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import ProductOptions from "./ProductOptions";
 import { Product } from "@/types";
 import { formatPrice } from "@/utils/helpers";
-import useProduct from "@/hooks/useProduct";
+import { useProduct } from "@/hooks";
 
 interface ProductItemProps {
   product: Product;

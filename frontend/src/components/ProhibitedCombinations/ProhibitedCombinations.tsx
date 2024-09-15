@@ -68,6 +68,4 @@ const ProhibitedCombinations: React.FC<ProhibitedCombinationsProps> = ({
   );
 };
 
-ProhibitedCombinations.displayName = "ProhibitedCombinations";
-
 export default withProhibitedCombinations(ProhibitedCombinations);

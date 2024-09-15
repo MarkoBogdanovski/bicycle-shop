@@ -7,10 +7,12 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { classNames } from "@/utils/helpers";
+import { useLocation } from "react-router-dom";
 
 const navigation = [
   { name: "Dashboard", href: "/", current: false },
   { name: "New Product", href: "/product", current: false },
+  { name: "New Part", href: "/part", current: false },
 ];
 
 interface LayoutProps {
@@ -18,6 +20,9 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps): JSX.Element => {
+  const { pathname } = useLocation();
+  const page = pathname.replace("/", "");
+
   return (
     <>
       <div className="min-h-full">
@@ -38,9 +43,11 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
                       <Link
                         key={item.name}
                         to={item.href}
-                        aria-current={item.current ? "page" : undefined}
+                        aria-current={
+                          item.href === pathname ? "page" : undefined
+                        }
                         className={classNames(
-                          item.current
+                          item.href === pathname
                             ? "bg-gray-900 text-white"
                             : "text-gray-300 hover:bg-gray-700 hover:text-white",
                           "rounded-md px-3 py-2 text-sm font-medium",
@@ -95,7 +102,7 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
         <header className="bg-white shadow">
           <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Dashboard
+              {page}
             </h1>
           </div>
         </header>

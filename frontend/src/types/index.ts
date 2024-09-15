@@ -76,3 +76,28 @@ export interface Parts {
   class?: string; // Optional: CSS class for visual styling
   selectedClass?: string; // Optional: CSS class for selected state
 }
+
+// Context for managing state in the AddProduct component
+export interface PartContextType {
+  localSelectedOptions: Record<string, string[]>;
+  notification: Record<string, string>; // Holds notification messages
+  productName: string;
+  productPrice: string;
+  condition: string;
+  combinations: Record<string, string[]>; // Holds prohibited combinations
+  prohibitedOptions: string[];
+  setLocalSelectedOptions: React.Dispatch<
+    React.SetStateAction<Record<string, string[]>>
+  >;
+  setProductName: React.Dispatch<React.SetStateAction<string>>;
+  setProductPrice: React.Dispatch<React.SetStateAction<string>>; // Consistency: use number instead of string for price
+  setCombinations: React.Dispatch<
+    React.SetStateAction<Record<string, string[]>>
+  >;
+  resetForm: React.MouseEventHandler<HTMLButtonElement>;
+  handleForm: React.MouseEventHandler<HTMLButtonElement>;
+  data: GroupedParts[] | undefined; // Optional data state
+  error: Error | null;
+  isLoading: boolean;
+  isError: boolean;
+}

@@ -1,16 +1,27 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Part extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      // Define the many-to-many relationship between Part and ProductParts
+      this.belongsToMany(models.Product, {
+        through: 'ProductParts',
+        foreignKey: 'partId',
+        as: 'products'
+      });
+
+      // Define the one-to-many relationship with PartOptionCombination for partId
+      this.hasMany(models.PartOptionCombination, {
+        foreignKey: 'partId',
+        as: 'partCombinations'
+      });
+
+      // Define the one-to-many relationship with PartOptionCombination for optionId
+      this.hasMany(models.PartOptionCombination, {
+        foreignKey: 'optionId',
+        as: 'optionCombinations'
+      });
     }
   }
 
@@ -23,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     type: {
       type: DataTypes.STRING, // e.g., 'frameType', 'wheels', 'chain', etc.
@@ -40,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Part',
-    timestamps: true
+    timestamps: true,
   });
 
   return Part;

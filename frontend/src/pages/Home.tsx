@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ProductItem from "@/components/Product";
 import ProductList from "@/components/Product/ProductList";
-import useFetchData from "@/hooks/useFetchData";
+import { useFetchData } from "@/hooks";
 import { Product } from "@/types";
 
 const Home: React.FC = () => {
@@ -17,6 +17,8 @@ const Home: React.FC = () => {
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error?.message}</div>;
+  if (data?.products?.length === 0)
+    return <div>No products available, try adding new products first... </div>;
 
   return (
     <>

@@ -2,14 +2,14 @@ import React from "react";
 import ProhibitedCombinations from "./ProhibitedCombinations/ProhibitedCombinations"; // Import the HOC-wrapped component
 import withMultiSelectDropdown from "./MultiSelectDropdown/withMultiSelectDropdown";
 import { convertToGroupedData } from "@/utils/helpers";
-import { useProductContext } from "@/providers/ProductProvider"; // Import the context hook
+import { useProductContext } from "@/contexts/ProductProvider"; // Import the context hook
 
 const MyComponent = (props: { children: React.ReactNode }) => (
   <>{props.children}</>
 );
 const EnhancedComponent = withMultiSelectDropdown(MyComponent);
 
-interface CombinationsManagerProps {
+interface ProhibitedCombinationsManagerProps {
   data: object;
   localSelectedOptions: object;
   handleCombinationsChange: (
@@ -19,7 +19,9 @@ interface CombinationsManagerProps {
   handleOptionChange: (groupKey: string, newSelectedOptions: string[]) => void;
 }
 
-const CombinationsManager: React.FC<CombinationsManagerProps> = ({
+const ProhibitedCombinationsManager: React.FC<
+  ProhibitedCombinationsManagerProps
+> = ({
   data,
   localSelectedOptions,
   handleCombinationsChange,
@@ -46,8 +48,6 @@ const CombinationsManager: React.FC<CombinationsManagerProps> = ({
     () => data && convertToGroupedData(data),
     [data],
   );
-
-  console.log(groups);
 
   return (
     <>
@@ -108,4 +108,4 @@ const CombinationsManager: React.FC<CombinationsManagerProps> = ({
   );
 };
 
-export default CombinationsManager;
+export default ProhibitedCombinationsManager;

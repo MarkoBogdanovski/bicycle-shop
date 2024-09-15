@@ -1,18 +1,15 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { useProductContext } from "@/providers/ProductProvider";
+import React, { useState, useCallback } from "react";
 import { formatPrice } from "@/utils/helpers";
 import { debounce } from "lodash";
 
-const ProductInfoInput: React.FC = () => {
+const InfoInput: React.FC = () => {
+  const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<string>("");
-  const { productName, productPrice, setProductName, setProductPrice } =
-    useProductContext();
-
   // Debounced function to handle price formatting
   const debouncedHandlePriceChange = useCallback(
     debounce((inputValue: string) => {
       const formattedPrice = formatPrice(inputValue);
-      setProductPrice(formattedPrice);
+      setPrice(formattedPrice);
     }, 500), // 500ms debounce delay
     [],
   );
@@ -22,10 +19,6 @@ const ProductInfoInput: React.FC = () => {
     setPrice(inputValue);
     debouncedHandlePriceChange(inputValue); // Call debounced function
   };
-
-  useEffect(() => {
-    setPrice(productPrice);
-  }, [productPrice]);
 
   return (
     <>
@@ -43,8 +36,8 @@ const ProductInfoInput: React.FC = () => {
               id="name"
               name="name"
               type="text"
-              value={productName}
-              onChange={(e) => setProductName(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
@@ -73,4 +66,4 @@ const ProductInfoInput: React.FC = () => {
   );
 };
 
-export default ProductInfoInput;
+export default InfoInput;

@@ -1,34 +1,15 @@
 import React, { useEffect } from "react";
-import ProductInfoInput from "@/components/InfoInput/ProductInfoInput";
-import ProhibitedCombinationsManager from "@/components/ProhibitedCombinationsManager";
+import PartInfoInput from "@/components/InfoInput/PartInfoInput";
 import Notification from "@/components/Notification";
 import { useProductContext } from "@/contexts/ProductProvider";
-import { useFetchData, useHandleCombinationsChange } from "@/hooks"; // Import the custom hook
+import { useFetchData } from "@/hooks";
+import OptionsCombinationsManager from "@/components/OptionsCombinationsManager";
 
-const AddProduct: React.FC = () => {
+const AddPart: React.FC = () => {
   const { data, error, isLoading, isError } = useFetchData(`parts`);
   const [showNotification, setShowNotification] = React.useState<boolean>(true);
-  const {
-    localSelectedOptions,
-    notification,
-    setLocalSelectedOptions,
-    setCombinations,
-    resetForm,
-    handleForm,
-  } = useProductContext();
-  const handleCombinationsChange = useHandleCombinationsChange({
-    setCombinations,
-  });
-
-  const handleOptionChange = (
-    groupKey: string,
-    newSelectedOptions: string[],
-  ) => {
-    setLocalSelectedOptions((prev) => ({
-      ...prev,
-      [groupKey]: newSelectedOptions,
-    }));
-  };
+  const { localSelectedOptions, notification, resetForm, handleForm } =
+    useProductContext();
 
   useEffect(() => setShowNotification(!!notification.message), [notification]);
 
@@ -46,16 +27,14 @@ const AddProduct: React.FC = () => {
       )}
       <div className="border-b border-b-grey/900 pb-6">
         <h2 className="text-base font-semibold leading-7 text-gray-900">
-          Product Information
+          Part Information
         </h2>
         <div className="space-y-5">
-          <ProductInfoInput />
+          <PartInfoInput />
 
-          <ProhibitedCombinationsManager
+          <OptionsCombinationsManager
             data={data}
             localSelectedOptions={localSelectedOptions}
-            handleCombinationsChange={handleCombinationsChange}
-            handleOptionChange={handleOptionChange}
           />
         </div>
       </div>
@@ -79,4 +58,4 @@ const AddProduct: React.FC = () => {
   );
 };
 
-export default AddProduct;
+export default AddPart;

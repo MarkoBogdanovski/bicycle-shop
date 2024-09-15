@@ -25,20 +25,41 @@ module.exports = (sequelize, DataTypes) => {
      * @param {Object} selectedOptions - User's selected configuration.
      * @returns {number} - The total price of the product.
     */
-    async calculatePrice(selectedOptions) {
-      if (!Array.isArray(selectedOptions) || selectedOptions.length === 0) {
-        throw new Error('Selected options must be a non-empty array.');
+    /**
+     * Calculates the total price based on selected parts and price dependencies.
+     * @param {Array} selectedParts - Array of selected part IDs.
+     * @returns {number} - The total price of the product.
+     */
+    async calculatePrice(selectedParts) {
+      if (!Array.isArray(selectedParts) || selectedParts.length === 0) {
+        throw new Error('Selected parts must be a non-empty array.');
       }
 
-      // Fetch only the parts that match the selected options (part IDs)
-      const selectedParts = await this.getParts({
+      // Check for valid part combinations
+      const combinations = await sequelize.models.PartOptionCombination.findAll({
         where: {
-          id: selectedOptions, // Match the selected part IDs
+          partId: selectedParts[0], // First part ID in combination
+          optionId: selectedParts[1], // Second part ID in combination
         },
       });
 
-      // Sum the prices of the selected parts
-      const totalPrice = selectedParts.reduce((total, part) => total + part.price, 0);
+      if (combinations.length > 0) {
+        // Return the price from the matching combination
+        return combinations[0].price;
+      }
+
+      // If no combination price, calculate based on individual part prices
+      const parts = await sequelize.models.Part.findAll({
+        where: {
+          id: selectedParts,
+        },
+      });
+
+      if (parts.length !== selectedParts.length) {
+        throw new Error('One or more selected parts are not found.');
+      }
+
+      const totalPrice = parts.reduce((total, part) => total + part.price, 0);
 
       return totalPrice;
     }
