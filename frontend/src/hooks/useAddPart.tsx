@@ -12,6 +12,7 @@ const useAddPart = (
   const handleForm = useCallback(async () => {
     // Prepare the data to be sent as JSON
     const basePrice: number = parseFloat(partPrice.replace(/,/g, ""));
+
     const formData = {
       partName,
       basePrice,

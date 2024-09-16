@@ -4,7 +4,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "3000:80"  # Frontend accessible on port 3000 (via Nginx, etc.)
+      - "5173:80"
     networks:
       - backend-api
     depends_on:
@@ -15,7 +15,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "4000:3000"  # Expose the backend on port 4000 for external access
+      - "3000:3000"  # Expose the backend on port 4000 for external access
     depends_on:
       postgres:
         condition: service_healthy

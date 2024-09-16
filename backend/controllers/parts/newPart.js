@@ -39,11 +39,13 @@ const addPartOptionCombinations = async (partId, selectedOptions) => {
     // Validate input
     if (!selectedOptions || !partId) throw new Error('Invalid input');
 
+    const formatPrice = (price) => parseFloat(price.replace(/,/g, ""));
+
     // Prepare records to insert
     const records = Object.entries(selectedOptions).map(([key, { condition, price }]) => ({
       partId,
       optionId: condition,
-      price: price,
+      price: formatPrice(price),
     }));
 
     // Add the combinations to the PartOptionCombination table
