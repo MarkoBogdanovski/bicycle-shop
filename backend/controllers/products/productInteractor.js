@@ -15,7 +15,7 @@ const validateCombinations = async (req, res, next) => {
 
 const calculatePrice = async (req, res, next) => {
   const { productId } = req.params;
-  const partsIds = Object.values(req.body).map(id => id);
+  const partsIds = Object.values(req.body.selectedOptions).map(id => id);
 
   try {
     const product = await Product.findByPk(productId);

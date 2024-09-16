@@ -28,7 +28,6 @@ module.exports = (sequelize, DataTypes) => {
     async calculatePrice(partIds) {
       // Filter out any empty strings or invalid entries from the selectedOptions array
       const validParts = partIds.filter(partId => partId && typeof partId === 'string');
-
       // If no valid parts are selected, return the product's base price
       if (validParts.length === 0) return this.basePrice;
 
