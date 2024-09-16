@@ -43,10 +43,8 @@ const addPartOptionCombinations = async (partId, selectedOptions) => {
     const records = Object.entries(selectedOptions).map(([key, { condition, price }]) => ({
       partId,
       optionId: condition,
-      price,
+      price: price,
     }));
-
-    console.log(records);
 
     // Add the combinations to the PartOptionCombination table
     await PartOptionCombination.bulkCreate(records);
