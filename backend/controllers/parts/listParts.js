@@ -15,9 +15,6 @@ const listParts = async (req, res, next) => {
 const fetchParts = async () => {
   try {
     const parts = await Part.findAll({
-      where: {
-        stock: true
-      },
       attributes: ['id', 'name', 'type', 'price', 'stock']
     });
 
