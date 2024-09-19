@@ -22,13 +22,15 @@ Used to store products (Bicycles for now).
 2. categoryId - Category it belongs to
 3. basePrice - Base price for the product without extra options or cusotmizations
 4. prohibitedCombinations - List of combinations that are not allowed
-#### ProductParts
-Used as one-to-one mapping table
+#### Product Parts
+Used as one-to-one relations table
 #### Parts
 1. name - Part name
 2. type - Type of part (rim, color...)
 3. price - Price of the part
 4. stock - Used to mark if the part is available
+#### Part Option Combinations
+Used as one-to-many relations table
 
 ## The description of the main user actions in this e-commerce website
 ### The product page consists of ProductList and ProductItem component.
